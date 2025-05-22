@@ -105,18 +105,38 @@ GROQ_API_KEY=your-key-here
 
 ## Usage
 
-Use the following shortcuts to interact with PushScript:
+Use the following shortcuts to interact with PushScript (based on your package manager):
 
+### With pnpm:
 - `pnpm push` - Commit changes with an AI-generated message and push to the remote repository
 - `pnpm commit` - Just commit changes with an AI-generated message (no push)
 - `pnpm pushscript` - Access PushScript's general CLI
 
+### With npm:
+- `npm run push` - Commit changes with an AI-generated message and push to the remote repository
+- `npm run commit` - Just commit changes with an AI-generated message (no push)
+- `npm run pushscript` - Access PushScript's general CLI
+
+### With yarn:
+- `yarn push` - Commit changes with an AI-generated message and push to the remote repository
+- `yarn commit` - Just commit changes with an AI-generated message (no push)
+- `yarn pushscript` - Access PushScript's general CLI
+
 ### Command Options
 
+#### With pnpm:
 - Specify a commit message: `pnpm push "your commit message"`
 - Specify a branch: `pnpm push "commit message" branch-name`
 - Push to main branch: `pnpm push --main` or `pnpm push main`
 - Push to dev branch: `pnpm push --dev` or `pnpm push dev`
+
+#### With npm:
+- Specify a commit message: `npm run push -- "your commit message"`
+- Specify a branch: `npm run push -- "commit message" branch-name`
+- Push to main branch: `npm run push -- --main` or `npm run push -- main`
+- Push to dev branch: `npm run push -- --dev` or `npm run push -- dev`
+
+> Note: With npm, you need to use `--` to pass arguments to the script
 
 ## Troubleshooting
 
