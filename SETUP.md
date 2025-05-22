@@ -152,7 +152,7 @@ If you encounter errors:
 If you're experiencing dependency-related errors:
 
 ```bash
-# Enable self-healing mode for automatic dependency installation
+# Enable self-healing mode for automatic dependency installation and management
 export PUSHSCRIPT_SELF_HEAL=true
 
 # Then run PushScript as normal

@@ -3,12 +3,13 @@
   "version": "1.0.0",
   "description": "AI-powered Git workflow automation with conventional commits, vulnerability scanning, and multi-provider LLM support",
   "type": "module",
-  "main": "./pushscript.js",
+  "main": "./cli.js",
   "bin": {
-    "pushscript": "./wrapper.cjs"
+    "pushscript": "./pushscript.cjs"
   },
   "files": [
-    "pushscript.js",
+    "cli.js",
+    "pushscript.cjs",
     "*.js",
     "*.cjs",
     "README.md",
@@ -43,9 +44,9 @@
     "url": "https://github.com/caterpillarC15/pushscript/issues"
   },
   "scripts": {
-    "push": "node wrapper.cjs",
-    "commit": "node wrapper.cjs commit",
-    "pushscript": "node wrapper.cjs",
+    "push": "node pushscript.cjs",
+    "commit": "node pushscript.cjs commit",
+    "pushscript": "node pushscript.cjs",
     "test": "echo \"No tests yet\" && exit 0",
     "lint": "echo \"No linting configured yet\"",
     "prepublishOnly": "npm run test"
