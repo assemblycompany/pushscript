@@ -50,7 +50,23 @@ function checkAndInstallDependencies() {
   
   console.log('Checking PushScript dependencies...');
   
-  // Check if node_modules directory exists and contains the required packages
+  // First: Try to require the packages (works if npm installed them globally or locally)
+  try {
+    require('node-fetch');
+    require('dotenv');
+    try {
+      // Optional but recommended dependency
+      require('@google/generative-ai');
+    } catch (aiError) {
+      // AI SDK missing isn't critical, will just use other providers
+    }
+    console.log('Dependencies already available in Node.js path.');
+    return; // Exit early - everything works!
+  } catch (error) {
+    console.log('Some dependencies need to be installed locally...');
+  }
+  
+  // If we get here, at least one dependency is missing, check which ones
   let needsInstall = false;
   
   if (!fs.existsSync(nodeModulesDir)) {
@@ -72,28 +88,82 @@ function checkAndInstallDependencies() {
   if (needsInstall) {
     console.log('Installing required packages for PushScript...');
     
-    try {
-      // Use --no-workspace to install dependencies locally in the pushscript directory
-      execSync('pnpm install --no-workspace node-fetch dotenv', { 
-        cwd: pushscriptDir,
-        stdio: 'inherit'
-      });
-      console.log('Dependencies installed successfully.');
-    } catch (error) {
-      console.error('Failed to install dependencies:', error.message);
-      console.log('Trying alternative installation method...');
+    // Determine packages to install
+    const requiredPackages = ['node-fetch', 'dotenv'];
+    const optionalPackages = ['@google/generative-ai'];
+    
+    // Try installing with various package managers in sequence
+    let success = false;
+    
+    // Define installation methods in order of preference
+    const installMethods = [
+      {
+        name: 'pnpm',
+        command: `pnpm install --no-workspace ${requiredPackages.join(' ')}`,
+        check: () => {
+          try {
+            execSync('pnpm --version', { stdio: 'ignore' });
+            return true;
+          } catch (e) {
+            return false;
+          }
+        }
+      },
+      {
+        name: 'npm',
+        command: `npm install ${requiredPackages.join(' ')}`,
+        check: () => true // npm should always be available if Node.js is installed
+      },
+      {
+        name: 'yarn',
+        command: `yarn add ${requiredPackages.join(' ')}`,
+        check: () => {
+          try {
+            execSync('yarn --version', { stdio: 'ignore' });
+            return true;
+          } catch (e) {
+            return false;
+          }
+        }
+      }
+    ];
+    
+    // Try each installation method in sequence
+    for (const method of installMethods) {
+      if (!method.check()) continue;
       
       try {
-        // Fall back to npm if pnpm fails
-        execSync('npm install node-fetch dotenv', {
+        console.log(`Trying to install dependencies with ${method.name}...`);
+        execSync(method.command, {
           cwd: pushscriptDir,
           stdio: 'inherit'
         });
-        console.log('Dependencies installed successfully with npm.');
-      } catch (npmError) {
-        console.error('Failed to install dependencies with npm:', npmError.message);
-        process.exit(1);
+        console.log(`Dependencies installed successfully with ${method.name}.`);
+        
+        // Try to install the optional AI SDK for Gemini (recommended)
+        try {
+          console.log(`Installing optional AI SDK with ${method.name}...`);
+          const aiCommand = method.command.replace(requiredPackages.join(' '), optionalPackages.join(' '));
+          execSync(aiCommand, {
+            cwd: pushscriptDir,
+            stdio: 'inherit'
+          });
+          console.log('AI SDK installed successfully.');
+        } catch (aiError) {
+          console.log('Note: Optional AI SDK could not be installed, but PushScript will still work.');
+        }
+        
+        success = true;
+        break;
+      } catch (error) {
+        console.error(`Failed to install dependencies with ${method.name}:`, error.message);
       }
+    }
+    
+    if (!success) {
+      console.error('All installation methods failed. Please install dependencies manually:');
+      console.error(`npm install ${requiredPackages.join(' ')}`);
+      process.exit(1);
     }
   } else {
     console.log('PushScript dependencies already installed.');

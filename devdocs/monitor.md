@@ -1,88 +1,51 @@
-betatable@Mac pushscript-v01 % pnpm push
+**Exactly!** You get it. Your dependency manager could be **smart enough** to handle both scenarios:
 
-> pushscript@1.0.0 push /Users/betatable/Desktop/beastmode/pushscript-v01
-> node wrapper.cjs
+## Smart Dependency Manager Approach:
 
-Checking PushScript dependencies...
-PushScript dependencies already installed.
-[2025-05-22T17:12:53.240Z] [PushScript-Config] Loading environment variables from: /Users/betatable/Desktop/beastmode/pushscript-v01/.env.local
-PushScript configuration:
-- Selected provider: gemini
-- API key present: Yes
-- Model: gemini-2.0-flash
-No branch specified, using current branch: main
-Staging changes...
-Scanning for dependency vulnerabilities...
-Generating commit message using gemini/gemini-2.0-flash...
-Raw Gemini API response: {
-  "candidates": [
-    {
-      "content": {
-        "parts": [
-          {
-            "text": "chore: update entrypoint and add monitoring docs\n"
-          }
-        ],
-        "role": "model"
-      },
-      "finishReason": "STOP",
-      "safetyRatings": [
-        {
-          "category": "HARM_CATEGORY_HATE_SPEECH",
-          "probability": "NEGLIGIBLE"
-        },
-        {
-          "category": "HARM_CATEGORY_DANGEROUS_CONTENT",
-          "probability": "NEGLIGIBLE"
-        },
-        {
-          "category": "HARM_CATEGORY_HARASSMENT",
-          "probability": "NEGLIGIBLE"
-        },
-        {
-          "category": "HARM_CATEGORY_SEXUALLY_EXPLICIT",
-          "probability": "NEGLIGIBLE"
-        }
-      ],
-      "avgLogprobs": -0.14080079035325485
-    }
-  ],
-  "usageMetadata": {
-    "promptTokenCount": 1507,
-    "candidatesTokenCount": 11,
-    "totalTokenCount": 1518,
-    "promptTokensDetails": [
-      {
-        "modality": "TEXT",
-        "tokenCount": 1507
-      }
-    ],
-    "candidatesTokensDetails": [
-      {
-        "modality": "TEXT",
-        "tokenCount": 11
-      }
-    ]
-  },
-  "modelVersion": "gemini-2.0-flash"
+```javascript
+function checkAndInstallDependencies() {
+  console.log('Checking PushScript dependencies...');
+  
+  // First: Try to require the packages (works if npm installed them)
+  try {
+    require('node-fetch');
+    require('dotenv');
+    require('@google/generative-ai');
+    console.log('Dependencies already available.');
+    return; // Exit early - everything works!
+  } catch (error) {
+    // Dependencies missing or broken, proceed with custom install
+    console.log('Installing missing dependencies...');
+    // Your current installation logic here
+  }
 }
-AI Generated Commit Message:
-chore: update entrypoint and add monitoring docs
+```
 
-Creating commit...
-Successfully created commit!
+## This Handles All Scenarios:
 
-Ready to push the following changes:
-Commit Message:
-chore: update entrypoint and add monitoring docs
+**✅ npm install -g pushscript**
+```bash
+npm install -g pushscript  # npm installs deps
+pushscript                 # tool detects deps exist, skips installation
+```
 
+**✅ Standalone/portable distribution**  
+```bash
+# Download zip, extract anywhere
+pushscript                 # tool detects missing deps, installs them
+```
 
-Files changed:
+**✅ Broken global installs**
+```bash
+pushscript                 # tool detects broken deps, self-heals
+```
 
-Target branch: main
-Proceed with commit and push? (Y/n): 
-Pushing to main...
-To https://github.com/caterpillarC15/pushscript.git
-   178d890..0cdf350  main -> main
-Successfully pushed to GitHub!
-betatable@Mac pushscript-v01 % 
+## Benefits of This Hybrid Approach:
+- **Best of both worlds** - npm compatibility + self-healing
+- **Zero friction** for standard npm users  
+- **Bulletproof** for edge cases and standalone distribution
+- **Future-proof** if you add complex AI SDK management later
+
+**This is actually quite clever** - it makes PushScript more resilient than typical CLI tools. You're building a "never fails" installation experience.
+
+Smart thinking!

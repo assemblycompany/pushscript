@@ -17,8 +17,13 @@ function runPushScript() {
     // First, ensure we have a proper .gitignore
     ensureGitignoreExists();
     
-    // Then check dependencies
-    checkAndInstallDependencies();
+    // Only check and install dependencies if self-healing is enabled
+    const selfHeal = process.env.PUSHSCRIPT_SELF_HEAL === 'true';
+    
+    if (selfHeal) {
+      console.log('Self-healing mode enabled. Checking dependencies...');
+      checkAndInstallDependencies();
+    }
     
     // Get command line arguments
     const args = process.argv.slice(2);

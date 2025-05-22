@@ -134,6 +134,26 @@ PUSHSCRIPT_JSON_SIZE_LIMIT=256000
 
 # Enable automatic gitignore management (default: false)
 PUSHSCRIPT_AUTO_GITIGNORE_JSON=true
+
+# Enable self-healing dependency installation (default: false)
+# PUSHSCRIPT_SELF_HEAL=true
+```
+
+#### Self-Healing Mode
+
+PushScript includes a self-healing mode that can automatically install missing dependencies:
+
+- **Normal mode** (default): PushScript assumes dependencies are already installed via npm
+- **Self-healing mode**: Automatically installs missing dependencies using available package managers
+
+This is useful in scenarios where:
+- You've cloned the repository directly from GitHub
+- You're running PushScript without npm installation
+- You're running in an environment with missing or broken dependencies
+
+To enable self-healing mode, set:
+```bash
+export PUSHSCRIPT_SELF_HEAL=true
 ```
 
 ### Gemini Model Options

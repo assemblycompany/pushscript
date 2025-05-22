@@ -147,4 +147,18 @@ If you encounter errors:
 3. Make sure `"type": "module"` is present in your `package.json`
 4. Check that your API key is valid and has sufficient credits
 
+### Dependency Issues
+
+If you're experiencing dependency-related errors:
+
+```bash
+# Enable self-healing mode for automatic dependency installation
+export PUSHSCRIPT_SELF_HEAL=true
+
+# Then run PushScript as normal
+pnpm push
+```
+
+This will make PushScript automatically detect and install missing dependencies.
+
 For more detailed information, refer to the README.md in the pushscript directory.
