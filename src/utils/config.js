@@ -63,7 +63,7 @@ const projectRoot = findProjectRoot(process.cwd());
 // Get the root directory of the project
 const rootDir = process.cwd().split('/node_modules')[0]; // This ensures we get the true root even if called from within node_modules
 
-// Define patterns to search for in the root directory
+// Define patterns to search for
 const envFilePatterns = [
   '.env',
   '.env.local',
@@ -82,8 +82,17 @@ const possibleEnvFiles = [
     ? envFilePatterns.map(pattern => path.join(projectRoot, pattern)) 
     : []),
   
-  // Last resort: Try relative to current directory
-  ...envFilePatterns.map(pattern => path.resolve(process.cwd(), pattern))
+  // Third priority: Current working directory
+  ...envFilePatterns.map(pattern => path.resolve(process.cwd(), pattern)),
+  
+  // Fourth priority: Parent directory of current working directory
+  ...envFilePatterns.map(pattern => path.resolve(process.cwd(), '../', pattern)),
+  
+  // Fifth priority: Two directories up from current working directory
+  ...envFilePatterns.map(pattern => path.resolve(process.cwd(), '../../', pattern)),
+  
+  // Sixth priority: Three directories up from current working directory
+  ...envFilePatterns.map(pattern => path.resolve(process.cwd(), '../../../', pattern))
 ].filter(Boolean);
 
 let envFileLoaded = false;

@@ -3,9 +3,9 @@
  * Test script for JSON size limiter functionality
  */
 
-import { checkLargeJsonFiles, handleLargeJsonFiles } from './json-size-limiter.js';
-import { logInfo, logSuccess, logWarning } from './formatting.js';
-import config from './config.js';
+import { checkLargeJsonFiles, handleLargeJsonFiles } from '../src/security/json-size-limiter.js';
+import { logInfo, logSuccess, logWarning } from '../src/utils/formatting.js';
+import config from '../src/utils/config.js';
 
 async function main() {
   logInfo('Testing JSON size limiter functionality');
