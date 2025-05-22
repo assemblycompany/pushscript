@@ -1,0 +1,16 @@
+{
+  "name": "pushscript",
+  "version": "1.0.0",
+  "description": "Enhanced Git workflow automation tool",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "push": "node pushscript.js",
+    "commit": "node pushscript.js commit",
+    "pushscript": "node pushscript.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.5.0",
+    "node-fetch": "^3.3.2"
+  }
+}
