@@ -1,6 +1,6 @@
 {
   "name": "pushscript",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "AI-powered Git workflow automation with conventional commits, vulnerability scanning, and multi-provider LLM support",
   "type": "module",
   "main": "./cli.js",
@@ -12,10 +12,11 @@
     "pushscript.cjs",
     "*.js",
     "*.cjs",
-    "README.md",
     "SETUP.md",
-    "TOKEN_OPTIMIZATION.md",
-    "README-TOKENS.md"
+    "README.md",
+    "LICENSE",
+    "TRADEMARKS.md",
+    "CONTRIBUTING.md"
   ],
   "engines": {
     "node": ">=18.0.0"
@@ -34,7 +35,7 @@
     "commit-messages"
   ],
   "license": "MIT",
-  "author": "Rust Toshi <hi@pushscript.dev>",
+  "author": "PushScript Team <hi@pushscript.dev>",
   "repository": {
     "type": "git",
     "url": "https://github.com/caterpillarC15/pushscript.git"
