@@ -1,0 +1,12 @@
+{
+  "name": "pushscript",
+  "version": "1.0.0",
+  "description": "Enhanced Git workflow automation tool",
+  "type": "module",
+  "private": true,
+  "dependencies": {
+    "@google/generative-ai": "^0.24.1",
+    "dotenv": "^16.5.0",
+    "node-fetch": "^3.3.2"
+  }
+}

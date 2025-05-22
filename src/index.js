@@ -9,14 +9,14 @@ import path from 'path';
 import fetch from 'node-fetch';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
-import config from './config.js';
+import config from './utils/config.js';
 
 // Import module components
 import { getProviderConfig, buildApiRequest } from './providers.js';
-import { checkSensitiveFiles, checkDependencyVulnerabilities, promptUser, runSecurityChecks } from './security.js';
-import { detectDependencyConflicts, analyzeDependencyConflictsWithLLM } from './dependency.js';
-import { getGitStatus, categorizeChanges, generateSimpleCommitMessage, getCurrentBranch, confirmPush } from './git.js';
-import { colorize, logInfo, logSuccess, logWarning, logError, logTitle, logList, displayHelp } from './formatting.js';
+import { checkSensitiveFiles, checkDependencyVulnerabilities, promptUser, runSecurityChecks } from './security/security.js';
+import { detectDependencyConflicts, analyzeDependencyConflictsWithLLM } from './dependency/dependency.js';
+import { getGitStatus, categorizeChanges, generateSimpleCommitMessage, getCurrentBranch, confirmPush } from './git/git.js';
+import { colorize, logInfo, logSuccess, logWarning, logError, logTitle, logList, displayHelp } from './utils/formatting.js';
 // Import new Gemini token manager
 import { GeminiDiffOptimizer, createGeminiManager } from './token-utils.js';
 

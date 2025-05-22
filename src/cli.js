@@ -6,7 +6,7 @@
 
 import path from 'path';
 import { commit, push } from './index.js';
-import { displayHelp } from './formatting.js';
+import { displayHelp } from './utils/formatting.js';
 
 // Parse command line arguments
 function parseArgs() {

@@ -6,9 +6,9 @@
 import { execSync } from 'child_process';
 import fs from 'fs';
 import path from 'path';
-import { logWarning, logInfo, colorize } from './formatting.js';
+import { logWarning, logInfo, colorize } from '../utils/formatting.js';
 import fetch from 'node-fetch';
-import { getProviderConfig } from './providers.js';
+import { getProviderConfig } from '../providers.js';
 
 /**
  * Analyzes dependency conflicts using LLM to generate intelligent advice

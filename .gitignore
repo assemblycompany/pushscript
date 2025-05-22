@@ -27,3 +27,6 @@ debug-*
 .vscode/
 *.swp
 *.swo 
+
+# PushScript local dependencies
+scripts/pushscript/node_modules/

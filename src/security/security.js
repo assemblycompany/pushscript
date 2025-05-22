@@ -6,7 +6,7 @@
 import { execSync } from 'child_process';
 import fs from 'fs';
 import readline from 'readline';
-import { handleLargeJsonFiles } from './json-size-limiter.js';
+import { handleLargeJsonFiles } from '../security/json-size-limiter.js';
 
 /**
  * Checks for sensitive files in staged changes

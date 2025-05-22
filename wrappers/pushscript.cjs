@@ -8,8 +8,8 @@
 
 const fs = require('fs');
 const path = require('path');
-const { ensureGitignoreExists } = require('./gitignore-manager.cjs');
-const { checkAndInstallDependencies } = require('./dependency-manager.cjs');
+const { ensureGitignoreExists } = require('../src/git/gitignore-manager.cjs');
+const { checkAndInstallDependencies } = require('../src/dependency/dependency-manager.cjs');
 const { runCliScript } = require('./cli-runner.cjs');
 
 // Main function to run pushscript

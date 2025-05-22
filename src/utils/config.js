@@ -44,27 +44,55 @@ function findProjectRoot(startPath) {
 // Logger for config setup
 const logConfig = (message, level = 'info') => {
   const timestamp = new Date().toISOString();
-  if (level === 'info') {
-    console.log(`[${timestamp}] [PushScript-Config] ${message}`);
-  } else {
-    console.error(`[${timestamp}] [PushScript-Config] ERROR: ${message}`);
+  
+  switch (level) {
+    case 'error':
+      console.error(`[${timestamp}] [PushScript-Config] ERROR: ${message}`);
+      break;
+    case 'warn':
+      console.warn(`[${timestamp}] [PushScript-Config] WARNING: ${message}`);
+      break;
+    default:
+      console.log(`[${timestamp}] [PushScript-Config] ${message}`);
   }
 };
 
 // Start from the current working directory to find the project root
 const projectRoot = findProjectRoot(process.cwd());
 
-// Try to load environment variables from different possible locations
+// Get the root directory of the project
+const rootDir = process.cwd().split('/node_modules')[0]; // This ensures we get the true root even if called from within node_modules
+
+// Define patterns to search for in the root directory
+const envFilePatterns = [
+  '.env',
+  '.env.local',
+  '.env.development',
+  '.env.production',
+  '.env.test'
+];
+
+// Always look in the root directory first, then fall back to other locations
 const possibleEnvFiles = [
-  projectRoot ? path.join(projectRoot, '.env.local') : null,
-  projectRoot ? path.join(projectRoot, '.env') : null,
-  path.resolve(process.cwd(), '.env.local'),
-  path.resolve(process.cwd(), '.env'),
-  path.resolve(process.cwd(), '../../.env.local'),
-  path.resolve(process.cwd(), '../../.env')
+  // First priority: Files directly in the root directory
+  ...envFilePatterns.map(pattern => path.join(rootDir, pattern)),
+  
+  // Second priority: Project root from findProjectRoot (if different from rootDir)
+  ...(projectRoot && projectRoot !== rootDir 
+    ? envFilePatterns.map(pattern => path.join(projectRoot, pattern)) 
+    : []),
+  
+  // Last resort: Try relative to current directory
+  ...envFilePatterns.map(pattern => path.resolve(process.cwd(), pattern))
 ].filter(Boolean);
 
 let envFileLoaded = false;
+
+// Add debug info about where we're looking
+logConfig(`Looking for environment files in these locations (in order of priority):`);
+possibleEnvFiles.forEach((envPath, index) => {
+  logConfig(`  ${index + 1}. ${envPath} ${fs.existsSync(envPath) ? '(exists)' : '(not found)'}`);
+});
 
 // Try each possible env file location
 for (const envPath of possibleEnvFiles) {
@@ -77,7 +105,7 @@ for (const envPath of possibleEnvFiles) {
 }
 
 if (!envFileLoaded) {
-  logConfig('No .env or env.local file found, using system environment variables');
+  logConfig('No environment files found, using system environment variables', 'error');
 }
 
 // Provider-specific API key environment variables

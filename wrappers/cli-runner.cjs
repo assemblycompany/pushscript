@@ -14,7 +14,7 @@ const { execSync } = require('child_process');
  */
 function runCliScript(args) {
   // Path to the CLI script
-  const cliPath = path.join(__dirname, 'cli.js');
+  const cliPath = path.join(__dirname, '../src/cli.js');
   
   // Verify the CLI script exists
   if (!fs.existsSync(cliPath)) {

@@ -6,7 +6,7 @@
 import fs from 'fs';
 import path from 'path';
 import { execSync } from 'child_process';
-import { logWarning, logError, logInfo } from './formatting.js';
+import { logWarning, logError, logInfo } from '../utils/formatting.js';
 
 // Default size limit: 250KB (in bytes)
 const DEFAULT_SIZE_LIMIT = 250 * 1024;

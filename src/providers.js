@@ -4,7 +4,7 @@
  */
 
 import fetch from 'node-fetch';
-import config from './config.js';
+import config from './utils/config.js';
 import { GeminiTokenManager } from './token-utils.js';
 
 // Provider configurations with default models and API endpoints
