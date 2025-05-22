@@ -22,6 +22,17 @@ An enhanced Git workflow automation tool that simplifies commits and pushes with
 - **Interactive Confirmations**: User-friendly prompts for confirming actions
 - **Color-Coded Output**: Improved readability with color-coded console messages
 
+## Recommended Provider: Gemini
+
+While PushScript supports multiple AI providers, **Gemini** is our recommended choice for the best balance of performance and cost:
+
+- **Fast & Good Quality**: Gemini provides excellent commit message generation with minimal latency
+- **Free Tier Available**: `gemini-2.0-flash` performs well and is free for most usage scenarios
+- **Efficient Token Management**: Our built-in token optimization is tailored for Gemini's limits
+- **Simple Setup**: Just needs an API key and works well with default configuration
+
+To use Gemini, simply set `PUSHSCRIPT_LLM_PROVIDER=gemini` in your `.env.local` file.
+
 ## Installation
 
 1. Make sure you have Node.js installed
@@ -37,27 +48,32 @@ An enhanced Git workflow automation tool that simplifies commits and pushes with
 
 ## Configuration
 
-Create a `.env.local` file (or `.env`) with your preferred AI provider configuration:
+Create a `.env.local` file (or `.env`) with your AI provider configuration:
 
 ```
-# Provider to use (groq, openai, anthropic, gemini)
+# Provider to use - Gemini recommended for best balance of performance and cost
 PUSHSCRIPT_LLM_PROVIDER=gemini
 
-# API key for the selected provider (provider-specific variables preferred)
+# API key for Gemini (our recommended provider)
 GEMINI_API_KEY=AIza...your-key-here...
 
-# Alternative: Generic API key (avoid setting this to a provider name)
-# PUSHSCRIPT_LLM_API_KEY=your-key-here
+# Model selection for Gemini - gemini-2.0-flash is free and performs well
+GEMINI_PUSHSCRIPT_MODEL=gemini-2.0-flash
 
-# Optional: Model selection
-# Provider-specific (recommended):
+# If you prefer a different provider, uncomment and configure:
+# PUSHSCRIPT_LLM_PROVIDER=groq
+# GROQ_API_KEY=your-key-here
 # GROQ_PUSHSCRIPT_MODEL=llama-3.3-70b-versatile
-# OPENAI_PUSHSCRIPT_MODEL=gpt-4o
-# ANTHROPIC_PUSHSCRIPT_MODEL=claude-3.7-sonnet
-# GEMINI_PUSHSCRIPT_MODEL=gemini-2.0-pro
 
-# Or generic (fallback):
-# PUSHSCRIPT_LLM_MODEL=provider-specific-model-name
+# Or:
+# PUSHSCRIPT_LLM_PROVIDER=openai
+# OPENAI_API_KEY=your-key-here
+# OPENAI_PUSHSCRIPT_MODEL=gpt-4o
+
+# Or:
+# PUSHSCRIPT_LLM_PROVIDER=anthropic
+# ANTHROPIC_API_KEY=your-key-here
+# ANTHROPIC_PUSHSCRIPT_MODEL=claude-3.7-sonnet
 
 # JSON file size limit in bytes (default: 250KB)
 # PUSHSCRIPT_JSON_SIZE_LIMIT=256000
@@ -68,12 +84,12 @@ GEMINI_API_KEY=AIza...your-key-here...
 
 ## Provider Defaults and Requirements
 
-| Provider | Default Model | Requirements |
-|----------|---------------|-------------|
-| groq | llama-3.3-70b-versatile | Requires `model` parameter in requests (will use default if not specified) |
-| openai | gpt-4o | Requires `model` parameter in requests (will use default if not specified) |
-| anthropic | claude-3.7-sonnet | Requires `model` parameter in requests (will use default if not specified) |
-| gemini | gemini-2.0-flash | Requires model name in URL path, will use default if not specified |
+| Provider | Default Model | Requirements | Notes |
+|----------|---------------|-------------|-------|
+| gemini | gemini-2.0-flash | Requires model name in URL path | **RECOMMENDED** - Fast, free for most usage, and excellent quality |
+| groq | llama-3.3-70b-versatile | Requires `model` parameter in requests | Good performance but requires paid account |
+| openai | gpt-4o | Requires `model` parameter in requests | Highest quality but highest cost |
+| anthropic | claude-3.7-sonnet | Requires `model` parameter in requests | Good quality but higher cost |
 
 **Note:** While most providers have an official default model, their APIs may still require explicitly setting the model parameter in the request. Our implementation handles this automatically by using the specified defaults when needed.
 

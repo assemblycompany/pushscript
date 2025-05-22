@@ -3,17 +3,15 @@
   "version": "1.0.0",
   "description": "AI-powered Git workflow automation with conventional commits, vulnerability scanning, and multi-provider LLM support",
   "type": "module",
-  "main": "./pushscript.js",
+  "main": "./cli.js",
   "bin": {
     "pushscript": "./pushscript.js"
   },
   "files": [
-    "pushscript.js",
-    "*.js",
+    "cli.js",
+    "scripts/",
     "README.md",
-    "SETUP.md",
-    "TOKEN_OPTIMIZATION.md",
-    "README-TOKENS.md"
+    "LICENSE"
   ],
   "engines": {
     "node": ">=18.0.0"
@@ -42,19 +40,16 @@
     "url": "https://github.com/caterpillarC15/pushscript/issues"
   },
   "scripts": {
-    "push": "node pushscript.js",
-    "commit": "node pushscript.js commit",
-    "pushscript": "node pushscript.js",
     "test": "echo \"No tests yet\" && exit 0",
     "lint": "echo \"No linting configured yet\"",
     "prepublishOnly": "npm run test"
   },
   "dependencies": {
-    "@google/generative-ai": "^0.24.1",
     "dotenv": "^16.5.0",
     "node-fetch": "^3.3.2"
   },
   "optionalDependencies": {
+    "@google/generative-ai": "^1.0.0",
     "@anthropic-ai/sdk": "^0.12.0",
     "openai": "^4.23.0",
     "groq-sdk": "^0.1.1"
