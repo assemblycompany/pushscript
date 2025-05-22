@@ -1,24 +1,17 @@
-betatable@Mac pushscript-v01 % npm i
-
-added 47 packages, and audited 53 packages in 589ms
-
-9 packages are looking for funding
-  run `npm fund` for details
-
-found 0 vulnerabilities
 betatable@Mac pushscript-v01 % pnpm push
 
 > pushscript@1.0.0 push /Users/betatable/Desktop/beastmode/pushscript-v01
-> node pushscript.js
+> node wrapper.cjs
 
-[2025-05-22T17:07:55.876Z] [PushScript-Config] Loading environment variables from: /Users/betatable/Desktop/beastmode/pushscript-v01/.env.local
+Checking PushScript dependencies...
+PushScript dependencies already installed.
+[2025-05-22T17:12:53.240Z] [PushScript-Config] Loading environment variables from: /Users/betatable/Desktop/beastmode/pushscript-v01/.env.local
 PushScript configuration:
 - Selected provider: gemini
 - API key present: Yes
 - Model: gemini-2.0-flash
 No branch specified, using current branch: main
 Staging changes...
-Checking for dependency conflicts...
 Scanning for dependency vulnerabilities...
 Generating commit message using gemini/gemini-2.0-flash...
 Raw Gemini API response: {
@@ -27,7 +20,7 @@ Raw Gemini API response: {
       "content": {
         "parts": [
           {
-            "text": "docs(readme): recommend gemini, update provider config instructions\n"
+            "text": "chore: update entrypoint and add monitoring docs\n"
           }
         ],
         "role": "model"
@@ -51,37 +44,37 @@ Raw Gemini API response: {
           "probability": "NEGLIGIBLE"
         }
       ],
-      "avgLogprobs": -0.21505462206326997
+      "avgLogprobs": -0.14080079035325485
     }
   ],
   "usageMetadata": {
-    "promptTokenCount": 12782,
-    "candidatesTokenCount": 13,
-    "totalTokenCount": 12795,
+    "promptTokenCount": 1507,
+    "candidatesTokenCount": 11,
+    "totalTokenCount": 1518,
     "promptTokensDetails": [
       {
         "modality": "TEXT",
-        "tokenCount": 12782
+        "tokenCount": 1507
       }
     ],
     "candidatesTokensDetails": [
       {
         "modality": "TEXT",
-        "tokenCount": 13
+        "tokenCount": 11
       }
     ]
   },
   "modelVersion": "gemini-2.0-flash"
 }
 AI Generated Commit Message:
-docs(readme): recommend gemini, update provider config instructions
+chore: update entrypoint and add monitoring docs
 
 Creating commit...
 Successfully created commit!
 
 Ready to push the following changes:
 Commit Message:
-docs(readme): recommend gemini, update provider config instructions
+chore: update entrypoint and add monitoring docs
 
 
 Files changed:
@@ -90,6 +83,6 @@ Target branch: main
 Proceed with commit and push? (Y/n): 
 Pushing to main...
 To https://github.com/caterpillarC15/pushscript.git
-   6397c12..178d890  main -> main
+   178d890..0cdf350  main -> main
 Successfully pushed to GitHub!
 betatable@Mac pushscript-v01 % 
