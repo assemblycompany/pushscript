@@ -56,10 +56,10 @@ const projectRoot = findProjectRoot(process.cwd());
 
 // Try to load environment variables from different possible locations
 const possibleEnvFiles = [
-  projectRoot ? path.join(projectRoot, 'env.local') : null,
   projectRoot ? path.join(projectRoot, '.env.local') : null,
   projectRoot ? path.join(projectRoot, '.env') : null,
-  path.resolve(process.cwd(), '../../env.local'),
+  path.resolve(process.cwd(), '.env.local'),
+  path.resolve(process.cwd(), '.env'),
   path.resolve(process.cwd(), '../../.env.local'),
   path.resolve(process.cwd(), '../../.env')
 ].filter(Boolean);
