@@ -5,11 +5,12 @@
   "type": "module",
   "main": "./pushscript.js",
   "bin": {
-    "pushscript": "./pushscript.js"
+    "pushscript": "./wrapper.cjs"
   },
   "files": [
     "pushscript.js",
     "*.js",
+    "*.cjs",
     "README.md",
     "SETUP.md",
     "TOKEN_OPTIMIZATION.md",
@@ -42,9 +43,9 @@
     "url": "https://github.com/caterpillarC15/pushscript/issues"
   },
   "scripts": {
-    "push": "node pushscript.js",
-    "commit": "node pushscript.js commit",
-    "pushscript": "node pushscript.js",
+    "push": "node wrapper.cjs",
+    "commit": "node wrapper.cjs commit",
+    "pushscript": "node wrapper.cjs",
     "test": "echo \"No tests yet\" && exit 0",
     "lint": "echo \"No linting configured yet\"",
     "prepublishOnly": "npm run test"
