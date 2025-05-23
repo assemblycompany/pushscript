@@ -148,7 +148,9 @@ const ENV = {
     parseInt(process.env.PUSHSCRIPT_JSON_SIZE_LIMIT) : 
     250 * 1024,
   // Auto-gitignore large JSON files
-  AUTO_GITIGNORE_JSON: process.env.PUSHSCRIPT_AUTO_GITIGNORE_JSON === 'true'
+  AUTO_GITIGNORE_JSON: process.env.PUSHSCRIPT_AUTO_GITIGNORE_JSON === 'true',
+  // Development mode: exclude devdocs from main branch commits
+  EXCLUDE_DEVDOCS_FOR_MAIN: process.env.PUSHSCRIPT_EXCLUDE_DEVDOCS_FOR_MAIN === 'true'
 };
 
 // Export configuration
@@ -161,5 +163,7 @@ export default {
   defaultModels: DEFAULT_MODELS,
   // JSON size limiting configuration
   jsonSizeLimit: ENV.JSON_SIZE_LIMIT,
-  autoGitignoreJson: ENV.AUTO_GITIGNORE_JSON
+  autoGitignoreJson: ENV.AUTO_GITIGNORE_JSON,
+  // Development configuration
+  excludeDevdocsForMain: ENV.EXCLUDE_DEVDOCS_FOR_MAIN
 }; 
