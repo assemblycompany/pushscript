@@ -55,7 +55,6 @@
     "push": "pushscript",
     "commit": "pushscript commit",
     "pushscript": "pushscript",
-    "push:all": "npm run push:dev && npm run push:main && npm run restore:devdocs",
     "push:main": "npm run clean:devdocs && git add . && git commit -m 'chore: remove devdocs for public release' && git push origin main",
     "push:dev": "git push origin dev",
     "clean:devdocs": "rm -rf devdocs",
