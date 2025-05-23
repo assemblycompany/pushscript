@@ -19,6 +19,7 @@ import { getGitStatus, categorizeChanges, generateSimpleCommitMessage, getCurren
 import { colorize, logInfo, logSuccess, logWarning, logError, logTitle, logList, displayHelp } from './utils/formatting.js';
 // Import new Gemini token manager
 import { GeminiDiffOptimizer, createGeminiManager } from './token-utils.js';
+import { handleLargeJsonFiles } from './security/json-size-limiter.js';
 
 // Setup for ESM
 const __filename = fileURLToPath(import.meta.url);
@@ -224,6 +225,13 @@ export async function commit(message) {
       } catch (error) {
         // Helper not available (normal for published package users) - continue normally
       }
+    }
+
+    // Check for large JSON files and handle them based on config
+    const jsonCheckPassed = handleLargeJsonFiles(config.autoGitignoreJson);
+    if (!jsonCheckPassed) {
+      logError('Large JSON files detected. Please resolve before committing.');
+      return null;
     }
 
     // Recheck sensitive files after staging
