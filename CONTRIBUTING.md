@@ -10,7 +10,7 @@ PushScript turns *friction* into *flow* for developers. If you have ideas, polis
 
 ```bash
 # Fork & clone
-$ git clone https://github.com/<you>/pushscript && cd pushscript
+$ git clone https://github.com/caterpillarC15/pushscript && cd pushscript
 
 # Install deps (Node ≥ 18)
 $ npm install   # or pnpm install
