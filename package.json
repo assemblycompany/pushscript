@@ -52,10 +52,11 @@
     "url": "https://github.com/caterpillarC15/pushscript/issues"
   },
   "scripts": {
-    "push": "PUSHSCRIPT_EXCLUDE_DEVDOCS=true pushscript",
+    "push": "pushscript",
     "commit": "pushscript commit",
     "pushscript": "pushscript",
     "push:dev": "pushscript dev",
+    "setup:hooks": "node scripts/setup-git-hooks.js",
     "clean:devdocs": "rm -rf devdocs",
     "restore:devdocs": "git checkout HEAD~1 -- devdocs/ 2>/dev/null || echo 'devdocs restored from git'",
     "test": "node --test test/",

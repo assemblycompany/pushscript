@@ -208,18 +208,7 @@ export async function commit(message) {
 
     // Stage changes
     logInfo('Staging changes...');
-    if (process.env.PUSHSCRIPT_EXCLUDE_DEVDOCS === 'true') {
-      execSync('git add .');
-      // Unstage devdocs folder if it exists
-      try {
-        execSync('git reset devdocs/', { stdio: 'ignore' });
-        logInfo('Excluded devdocs from staging for main branch');
-      } catch (error) {
-        // devdocs doesn't exist or wasn't staged, continue
-      }
-    } else {
-      execSync('git add .');
-    }
+    execSync('git add .');
 
     // Recheck sensitive files after staging
     checkSensitiveFiles();
