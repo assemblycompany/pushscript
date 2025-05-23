@@ -56,9 +56,6 @@
     "commit": "pushscript commit",
     "pushscript": "pushscript",
     "push:dev": "git checkout -b dev 2>/dev/null || git checkout dev && pushscript",
-    "setup:hooks": "node scripts/setup-git-hooks.js",
-    "clean:devdocs": "rm -rf devdocs",
-    "restore:devdocs": "git checkout HEAD~1 -- devdocs/ 2>/dev/null || echo 'devdocs restored from git'",
     "test": "node --test test/",
     "lint": "echo \"No linting configured yet\"",
     "prepublishOnly": "npm run test"
