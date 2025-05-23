@@ -210,6 +210,22 @@ export async function commit(message) {
     logInfo('Staging changes...');
     execSync('git add .');
 
+    // Handle devdocs exclusion for main branch in development mode
+    if (config.excludeDevdocsForMain) {
+      try {
+        // Dynamically import the helper utility (not published with package)
+        const { excludeDevdocsForMain } = await import('../scripts/branch-utils.js');
+        
+        // Check if we're pushing to main branch
+        const targetBranch = process.env.PUSHSCRIPT_TARGET_BRANCH || 'main';
+        if (targetBranch === 'main') {
+          excludeDevdocsForMain();
+        }
+      } catch (error) {
+        // Helper not available (normal for published package users) - continue normally
+      }
+    }
+
     // Recheck sensitive files after staging
     checkSensitiveFiles();
 
@@ -395,8 +411,14 @@ export async function push(message, branch) {
       logInfo(`No branch specified, using current branch: ${branch}`);
     }
 
+    // Set target branch for devdocs exclusion logic
+    process.env.PUSHSCRIPT_TARGET_BRANCH = branch;
+
     const commitMessage = await commit(message);
     if (!commitMessage) return; // If commit failed or nothing to commit
+
+    // Clean up environment variable
+    delete process.env.PUSHSCRIPT_TARGET_BRANCH;
 
     // Check if we have changes to push
     try {
