@@ -22,6 +22,9 @@ debug-*
 # Large JSON files
 # (PushScript will automatically detect these)
 
+# Internal development documentation
+devdocs/
+
 # Editor directories and files
 .idea/
 .vscode/
