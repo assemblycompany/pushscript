@@ -52,12 +52,12 @@
     "url": "https://github.com/caterpillarC15/pushscript/issues"
   },
   "scripts": {
-    "push": "npm run clean:devdocs && git add . && pushscript",
+    "push": "PUSHSCRIPT_EXCLUDE_DEVDOCS=true pushscript",
     "commit": "pushscript commit",
     "pushscript": "pushscript",
     "push:dev": "pushscript dev",
     "clean:devdocs": "rm -rf devdocs",
-    "restore:devdocs": "git checkout HEAD -- devdocs/ 2>/dev/null || echo 'devdocs restored from git'",
+    "restore:devdocs": "git checkout HEAD~1 -- devdocs/ 2>/dev/null || echo 'devdocs restored from git'",
     "test": "node --test test/",
     "lint": "echo \"No linting configured yet\"",
     "prepublishOnly": "npm run test"
