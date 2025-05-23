@@ -234,6 +234,13 @@ export async function commit(message) {
       return null;
     }
 
+    // Early check: Verify we still have staged changes after exclusions
+    const earlyChanges = getGitStatus();
+    if (earlyChanges.length === 0) {
+      logWarning('No changes to commit after staging.');
+      return;
+    }
+
     // Recheck sensitive files after staging
     checkSensitiveFiles();
 
