@@ -52,11 +52,10 @@
     "url": "https://github.com/caterpillarC15/pushscript/issues"
   },
   "scripts": {
-    "push": "pushscript",
+    "push": "npm run clean:devdocs && git add . && pushscript",
     "commit": "pushscript commit",
     "pushscript": "pushscript",
-    "push:main": "npm run clean:devdocs && git add . && git commit -m 'chore: remove devdocs for public release' && git push origin main",
-    "push:dev": "git push origin dev",
+    "push:dev": "pushscript dev",
     "clean:devdocs": "rm -rf devdocs",
     "restore:devdocs": "git checkout HEAD -- devdocs/ 2>/dev/null || echo 'devdocs restored from git'",
     "test": "node --test test/",
