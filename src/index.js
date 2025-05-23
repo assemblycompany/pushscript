@@ -397,10 +397,10 @@ export async function commit(message) {
  */
 export async function push(message, branch) {
   try {
-    // Get current branch if none specified
+    // Default to main branch if none specified
     if (!branch) {
-      branch = await getCurrentBranch() || 'main';
-      logInfo(`No branch specified, using current branch: ${branch}`);
+      branch = 'main';
+      logInfo(`No branch specified, defaulting to: ${branch}`);
     }
 
     const commitMessage = await commit(message);
