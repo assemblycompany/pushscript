@@ -1,51 +1,36 @@
-**Exactly!** You get it. Your dependency manager could be **smart enough** to handle both scenarios:
+betatable@Mac exposeapi % pnpm push --help
 
-## Smart Dependency Manager Approach:
+> exposeapi@0.1.0 push /Users/betatable/Desktop/beastmode/exposeapi
+> node scripts/pushscript/cli.js --help
 
-```javascript
-function checkAndInstallDependencies() {
-  console.log('Checking PushScript dependencies...');
+[2025-05-23T02:51:40.675Z] [PushScript-Config] Loading environment variables from: /Users/betatable/Desktop/beastmode/exposeapi/.env.local
+PushScript configuration:
+- Selected provider: gemini
+- API key present: Yes
+- Model: gemini-2.0-flash
+
+PushScript - Git Push Helper
+
+Usage:
+  push [message] [branch]
+  push main
+  push dev
+
+Options:
+  --help           Show this help message
+  --main           Push to main branch
+  --dev            Push to dev branch
   
-  // First: Try to require the packages (works if npm installed them)
-  try {
-    require('node-fetch');
-    require('dotenv');
-    require('@google/generative-ai');
-    console.log('Dependencies already available.');
-    return; // Exit early - everything works!
-  } catch (error) {
-    // Dependencies missing or broken, proceed with custom install
-    console.log('Installing missing dependencies...');
-    // Your current installation logic here
-  }
-}
-```
+Environment Variables:
+  PUSHSCRIPT_LLM_PROVIDER     LLM provider to use (groq, openai, anthropic, gemini)
+  PUSHSCRIPT_LLM_API_KEY      API key for the selected provider
+  PUSHSCRIPT_LLM_MODEL        Model to use with the selected provider
 
-## This Handles All Scenarios:
-
-**✅ npm install -g pushscript**
-```bash
-npm install -g pushscript  # npm installs deps
-pushscript                 # tool detects deps exist, skips installation
-```
-
-**✅ Standalone/portable distribution**  
-```bash
-# Download zip, extract anywhere
-pushscript                 # tool detects missing deps, installs them
-```
-
-**✅ Broken global installs**
-```bash
-pushscript                 # tool detects broken deps, self-heals
-```
-
-## Benefits of This Hybrid Approach:
-- **Best of both worlds** - npm compatibility + self-healing
-- **Zero friction** for standard npm users  
-- **Bulletproof** for edge cases and standalone distribution
-- **Future-proof** if you add complex AI SDK management later
-
-**This is actually quite clever** - it makes PushScript more resilient than typical CLI tools. You're building a "never fails" installation experience.
-
-Smart thinking!
+Examples:
+  push                     # Commit & push to current branch with AI-generated message
+  push "fix bug"           # Commit with specified message & push to current branch
+  push main                # Commit & push to main branch 
+  push dev                 # Commit & push to dev branch
+  push "new feature" dev   # Commit with message & push to dev branch
+  
+betatable@Mac exposeapi % 

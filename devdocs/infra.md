@@ -1,100 +1,125 @@
-### 2-minute repo makeover (no functional breakage)
+# PushScript™
 
-```
-pushscript/
-├── src/                    # all runtime code
-│   ├── cli.js
-│   ├── index.js
-│   ├── providers.js
-│   ├── token-utils.js
-│   ├── dependency/
-│   │   ├── dependency.js
-│   │   └── dependency-manager.cjs
-│   ├── git/
-│   │   ├── git.js
-│   │   └── gitignore-manager.cjs
-│   ├── security/
-│   │   ├── json-size-limiter.js
-│   │   └── security.js
-│   └── utils/
-│       ├── config.js
-│       └── check-models.js
-├── wrappers/               # executables
-│   └── pushscript.cjs      # bin entry
-├── test/                   # Jest or tap tests
-│   ├── json-limiter.test.js
-│   └── cli.test.js
-├── docs/                   # markdown & specs
-│   ├── TOKEN_OPTIMIZATION.md
-│   ├── README-TOKENS.md
-│   ├── SETUP.md
-│   └── next.md
-├── .gitignore
-├── LICENSE
-├── TRADEMARK-USAGE.md
-├── CONTRIBUTING.md
-├── README.md
-├── package.json
-└── .env.example            # sample env file
-```
+> **Zero‑friction AI commits & guardrails for every Git push.**
 
-**Why this layout**
+[![npm](https://img.shields.io/npm/v/pushscript?logo=npm)](https://www.npmjs.com/package/pushscript)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
+[![CI](https://github.com/your-org/pushscript/actions/workflows/ci.yml/badge.svg)](https://github.com/your-org/pushscript/actions)
 
-| Folder                                               | Rationale                                                           |
-| ---------------------------------------------------- | ------------------------------------------------------------------- |
-| `src/`                                               | One import root; future TypeScript or build tooling can point here. |
-| Nested sub-dirs (`dependency/`, `git/`, `security/`) | Keeps related modules together without flattening everything.       |
-| `wrappers/`                                          | Separates OS-specific launchers/binaries from pure library code.    |
-| `test/`                                              | CI auto-discovers tests, easy pattern for contributors.             |
-| `docs/`                                              | All long-form Markdown out of the way; README stays top-level.      |
+---
 
-**package.json tweaks**
-
-```json
-"main": "./src/cli.js",
-"bin": { "pushscript": "./wrappers/pushscript.cjs" },
-"files": [
-  "src/",
-  "wrappers/pushscript.cjs",
-  "LICENSE",
-  "README.md"
-]
-```
-
-*(Keeps npm tarball lean and avoids shipping `/docs` unless you want to.)*
-
-**Git commands to migrate**
+### Try it in 5 seconds
 
 ```bash
-# example subset — repeat for each file
-git mv cli.js src/cli.js
-git mv index.js src/index.js
-git mv providers.js src/providers.js
-git mv dependency-manager.cjs src/dependency/dependency-manager.cjs
-git mv dependency.js src/dependency/dependency.js
-git mv git.js src/git/git.js
-git mv gitignore-manager.cjs src/git/gitignore-manager.cjs
-git mv json-size-limiter.js src/security/json-size-limiter.js
-git mv security.js src/security/security.js
-git mv pushscript.cjs wrappers/pushscript.cjs
-git mv TOKEN_OPTIMIZATION.md docs/TOKEN_OPTIMIZATION.md
-# ...continue pattern
+npx pushscript@latest    # generates a Conventional Commit and pushes in one go
 ```
 
-*No code changes needed*; only the wrapper’s internal `require('./dependency-manager.cjs')` paths must become:
+*(Requires Node ≥ 18 and an AI API key—see below.)*
 
-```js
-const { checkAndInstallDependencies } = require('../src/dependency/dependency-manager.cjs');
+*Demo video coming soon—stay tuned!*
+
+---
+
+## Why PushScript?
+
+*Code moves businesses. Commit friction slows teams.* PushScript removes that friction with one command.
+
+| Done for you                        | How it helps                                                           |
+| ----------------------------------- | ---------------------------------------------------------------------- |
+| **AI‑perfect commit messages**      | Multi‑provider support: **Gemini** (default), OpenAI, Anthropic, Groq. |
+| **Dependency conflict & CVE scan**  | Stops version hell and vulnerable packages before they hit `main`.     |
+| **Sensitive‑file guard**            | Blocks commits with `.env`, large JSON dumps, or debug assets.         |
+| **Conventional Commit enforcement** | Semantic‑version hygiene for changelogs & releases.                    |
+
+---
+
+## 1 · Zero‑install set‑up
+
+1. **Install Node ≥ 18** (macOS: `brew install node` • Windows: [Node installer](https://nodejs.org)).
+2. **Grab an AI key.** We default to Google Gemini because it has a generous free tier.
+
+   ```bash
+   export GEMINI_API_KEY="AIza...."
+   export PUSHSCRIPT_LLM_PROVIDER=gemini   # omit if you stick with Gemini
+   ```
+3. **Run PushScript.**
+
+   ```bash
+   npx pushscript       # or  npm i -g pushscript && pushscript
+   ```
+
+   You’ll see a coloured diff preview and a suggested Conventional Commit. Hit **Y** to push.
+
+<details>
+<summary>Using OpenAI / Groq / Claude?</summary>
+Set:
+```bash
+export PUSHSCRIPT_LLM_PROVIDER=openai   # or groq / anthropic
+export OPENAI_API_KEY="sk-..."
+```
+PushScript picks sensible default models (`gpt‑4o`, `llama‑3.3‑70b‑versatile`, `claude‑3.7‑sonnet`).
+</details>
+
+---
+
+## 2 · Project‑level integration
+
+Add a script to `package.json`:
+
+```json
+"scripts": {
+  "push": "node scripts/push-scripts.js",
+  "commit": "node scripts/push-scripts.js commit"
+}
 ```
 
-(Use relative paths from `wrappers/pushscript.cjs`).
+Now teammates can just run `npm run push`.
 
-**CI & lint**
+---
 
-* Update Jest/glob pattern to `test/**/*.test.js`.
-* `eslint` basePath becomes `src`.
+## 3 · Advanced options
 
-**Time cost**
+| Flag                                  | When to use it                                  | Example                                    |
+| ------------------------------------- | ----------------------------------------------- | ------------------------------------------ |
+| `PUSHSCRIPT_JSON_SIZE_LIMIT`          | Custom max JSON size (bytes).                   | `export PUSHSCRIPT_JSON_SIZE_LIMIT=512000` |
+| `PUSHSCRIPT_AUTO_GITIGNORE_JSON=true` | Auto‑add large JSON to `.gitignore`.            | –                                          |
+| `PUSHSCRIPT_SELF_HEAL=true`           | You cloned source but didn’t run `npm install`. | –                                          |
 
-*<5 minutes* to move files + update import paths (VS Code multi-cursor).
-You get a clean, enterprise-grade structure that scales without adding build overhead today.
+<details>
+<summary>How JSON exclusion works (click)</summary>
+* Files > size limit or with `debug` in the name are caught pre‑commit.  
+* In auto‑mode they’re unstaged and appended to `.gitignore`; manual mode asks you what to do.
+</details>
+
+---
+
+## 4 · Troubleshooting
+
+| Symptom                         | Fix                                                                         |
+| ------------------------------- | --------------------------------------------------------------------------- |
+| **`EAI_AGAIN` / network error** | Check VPN / firewall; PushScript needs outbound HTTPS to your AI provider.  |
+| **`MODEL_NOT_FOUND`**           | Run `node src/utils/check-models.js` to list available models for your key. |
+| **“Cannot find module dotenv”** | Run `npm install` or enable `PUSHSCRIPT_SELF_HEAL=true`.                    |
+
+---
+
+## 5 · Roadmap
+
+* **0.1** – open‑core CLI *(today)*
+* **0.2** – Python dep scan
+* **0.3** – GitHub App + org dashboard
+* **0.4** – VS Code extension
+
+> Star ⭐ the repo to track releases.
+
+---
+
+## Contributing
+
+Helpful contributions keep PushScript moving. See [CONTRIBUTING.md](CONTRIBUTING.md) for quick‑start < 5 minutes.
+
+---
+
+## License & trademark
+
+MIT License © 2025 PushScript Team. *PushScript™* and logo are trademarks—please rename forks.

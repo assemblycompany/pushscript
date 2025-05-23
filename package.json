@@ -23,10 +23,7 @@
     ".npmrc",
     ".env.example",
     "LICENSE",
-    "README.md",
-    "SETUP.md",
-    "TRADEMARKS.md",
-    "CONTRIBUTING.md"
+    "README.md"
   ],
   "engines": {
     "node": ">=18.0.0"
@@ -50,7 +47,7 @@
     "type": "git",
     "url": "https://github.com/caterpillarC15/pushscript.git"
   },
-  "homepage": "https://github.com/caterpillarC15/pushscript#readme",
+  "homepage": "https://pushscript.dev",
   "bugs": {
     "url": "https://github.com/caterpillarC15/pushscript/issues"
   },

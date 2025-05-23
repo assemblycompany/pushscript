@@ -1,260 +1,29 @@
-betatable@Mac pushscript-v01 % npm pack --dry-run
-npm notice
-npm notice 📦  pushscript@0.1.0
-npm notice Tarball Contents
-npm notice 3.8kB CONTRIBUTING.md
-npm notice 1.1kB LICENSE
-npm notice 7.3kB README.md
-npm notice 1.6kB package.json
-npm notice 1.8kB src/cli.js
-npm notice 5.3kB src/dependency/dependency-manager.cjs
-npm notice 11.4kB src/dependency/dependency.js
-npm notice 773B src/dependency/node_modules/.modules.yaml
-npm notice 615B src/dependency/node_modules/.pnpm-workspace-state.json
-npm notice 38.5kB src/dependency/node_modules/.pnpm/@google+generative-ai@0.24.1/node_modules/@google/generative-ai/dist/generative-ai.d.ts
-npm notice 64.2kB src/dependency/node_modules/.pnpm/@google+generative-ai@0.24.1/node_modules/@google/generative-ai/dist/index.js
-npm notice 1.6kB src/dependency/node_modules/.pnpm/@google+generative-ai@0.24.1/node_modules/@google/generative-ai/dist/index.js.map
-npm notice 63.7kB src/dependency/node_modules/.pnpm/@google+generative-ai@0.24.1/node_modules/@google/generative-ai/dist/index.mjs
-npm notice 1.6kB src/dependency/node_modules/.pnpm/@google+generative-ai@0.24.1/node_modules/@google/generative-ai/dist/index.mjs.map
-npm notice 616B src/dependency/node_modules/.pnpm/@google+generative-ai@0.24.1/node_modules/@google/generative-ai/dist/scripts/check-format.d.ts
-npm notice 711B src/dependency/node_modules/.pnpm/@google+generative-ai@0.24.1/node_modules/@google/generative-ai/dist/scripts/format-patterns.d.ts
-npm notice 674B src/dependency/node_modules/.pnpm/@google+generative-ai@0.24.1/node_modules/@google/generative-ai/dist/scripts/license.d.ts
-npm notice 616B src/dependency/node_modules/.pnpm/@google+generative-ai@0.24.1/node_modules/@google/generative-ai/dist/scripts/run-format.d.ts
-npm notice 31.5kB src/dependency/node_modules/.pnpm/@google+generative-ai@0.24.1/node_modules/@google/generative-ai/dist/server/index.js
-npm notice 927B src/dependency/node_modules/.pnpm/@google+generative-ai@0.24.1/node_modules/@google/generative-ai/dist/server/index.js.map
-npm notice 31.3kB src/dependency/node_modules/.pnpm/@google+generative-ai@0.24.1/node_modules/@google/generative-ai/dist/server/index.mjs
-npm notice 925B src/dependency/node_modules/.pnpm/@google+generative-ai@0.24.1/node_modules/@google/generative-ai/dist/server/index.mjs.map
-npm notice 616B src/dependency/node_modules/.pnpm/@google+generative-ai@0.24.1/node_modules/@google/generative-ai/dist/server/scripts/check-format.d.ts
-npm notice 711B src/dependency/node_modules/.pnpm/@google+generative-ai@0.24.1/node_modules/@google/generative-ai/dist/server/scripts/format-patterns.d.ts
-npm notice 674B src/dependency/node_modules/.pnpm/@google+generative-ai@0.24.1/node_modules/@google/generative-ai/dist/server/scripts/license.d.ts
-npm notice 616B src/dependency/node_modules/.pnpm/@google+generative-ai@0.24.1/node_modules/@google/generative-ai/dist/server/scripts/run-format.d.ts
-npm notice 21.9kB src/dependency/node_modules/.pnpm/@google+generative-ai@0.24.1/node_modules/@google/generative-ai/dist/server/server.d.ts
-npm notice 1.9kB src/dependency/node_modules/.pnpm/@google+generative-ai@0.24.1/node_modules/@google/generative-ai/dist/server/src/errors.d.ts
-npm notice 1.4kB src/dependency/node_modules/.pnpm/@google+generative-ai@0.24.1/node_modules/@google/generative-ai/dist/server/src/gen-ai.d.ts
-npm notice 683B src/dependency/node_modules/.pnpm/@google+generative-ai@0.24.1/node_modules/@google/generative-ai/dist/server/src/index.d.ts
-npm notice 927B src/dependency/node_modules/.pnpm/@google+generative-ai@0.24.1/node_modules/@google/generative-ai/dist/server/src/methods/chat-session-helpers.d.ts
-npm notice 2.4kB src/dependency/node_modules/.pnpm/@google+generative-ai@0.24.1/node_modules/@google/generative-ai/dist/server/src/methods/chat-session.d.ts
-npm notice 868B src/dependency/node_modules/.pnpm/@google+generative-ai@0.24.1/node_modules/@google/generative-ai/dist/server/src/methods/count-tokens.d.ts
-npm notice 1.1kB src/dependency/node_modules/.pnpm/@google+generative-ai@0.24.1/node_modules/@google/generative-ai/dist/server/src/methods/embed-content.d.ts
-npm notice 1.1kB src/dependency/node_modules/.pnpm/@google+generative-ai@0.24.1/node_modules/@google/generative-ai/dist/server/src/methods/generate-content.d.ts
-npm notice 4.1kB src/dependency/node_modules/.pnpm/@google+generative-ai@0.24.1/node_modules/@google/generative-ai/dist/server/src/models/generative-model.d.ts
-npm notice 1.4kB src/dependency/node_modules/.pnpm/@google+generative-ai@0.24.1/node_modules/@google/generative-ai/dist/server/src/requests/request-helpers.d.ts
-npm notice 2.1kB src/dependency/node_modules/.pnpm/@google+generative-ai@0.24.1/node_modules/@google/generative-ai/dist/server/src/requests/request.d.ts
-npm notice 1.4kB src/dependency/node_modules/.pnpm/@google+generative-ai@0.24.1/node_modules/@google/generative-ai/dist/server/src/requests/response-helpers.d.ts
-npm notice 1.6kB src/dependency/node_modules/.pnpm/@google+generative-ai@0.24.1/node_modules/@google/generative-ai/dist/server/src/requests/stream-reader.d.ts
-npm notice 1.6kB src/dependency/node_modules/.pnpm/@google+generative-ai@0.24.1/node_modules/@google/generative-ai/dist/server/src/server/cache-manager.d.ts
-npm notice 764B src/dependency/node_modules/.pnpm/@google+generative-ai@0.24.1/node_modules/@google/generative-ai/dist/server/src/server/constants.d.ts
-npm notice 2.2kB src/dependency/node_modules/.pnpm/@google+generative-ai@0.24.1/node_modules/@google/generative-ai/dist/server/src/server/file-manager.d.ts
-npm notice 751B src/dependency/node_modules/.pnpm/@google+generative-ai@0.24.1/node_modules/@google/generative-ai/dist/server/src/server/index.d.ts
-npm notice 1.7kB src/dependency/node_modules/.pnpm/@google+generative-ai@0.24.1/node_modules/@google/generative-ai/dist/server/src/server/request.d.ts
-npm notice 5.9kB src/dependency/node_modules/.pnpm/@google+generative-ai@0.24.1/node_modules/@google/generative-ai/dist/server/types/content.d.ts
-npm notice 3.8kB src/dependency/node_modules/.pnpm/@google+generative-ai@0.24.1/node_modules/@google/generative-ai/dist/server/types/enums.d.ts
-npm notice 7.1kB src/dependency/node_modules/.pnpm/@google+generative-ai@0.24.1/node_modules/@google/generative-ai/dist/server/types/function-calling.d.ts
-npm notice 819B src/dependency/node_modules/.pnpm/@google+generative-ai@0.24.1/node_modules/@google/generative-ai/dist/server/types/index.d.ts
-npm notice 6.6kB src/dependency/node_modules/.pnpm/@google+generative-ai@0.24.1/node_modules/@google/generative-ai/dist/server/types/requests.d.ts
-npm notice 6.3kB src/dependency/node_modules/.pnpm/@google+generative-ai@0.24.1/node_modules/@google/generative-ai/dist/server/types/responses.d.ts
-npm notice 4.9kB src/dependency/node_modules/.pnpm/@google+generative-ai@0.24.1/node_modules/@google/generative-ai/dist/server/types/search-grounding.d.ts
-npm notice 3.0kB src/dependency/node_modules/.pnpm/@google+generative-ai@0.24.1/node_modules/@google/generative-ai/dist/server/types/server/caching.d.ts
-npm notice 2.2kB src/dependency/node_modules/.pnpm/@google+generative-ai@0.24.1/node_modules/@google/generative-ai/dist/server/types/server/files.d.ts
-npm notice 853B src/dependency/node_modules/.pnpm/@google+generative-ai@0.24.1/node_modules/@google/generative-ai/dist/server/types/server/index.d.ts
-npm notice 1.2kB src/dependency/node_modules/.pnpm/@google+generative-ai@0.24.1/node_modules/@google/generative-ai/dist/server/types/server/shared.d.ts
-npm notice 1.9kB src/dependency/node_modules/.pnpm/@google+generative-ai@0.24.1/node_modules/@google/generative-ai/dist/src/errors.d.ts
-npm notice 1.4kB src/dependency/node_modules/.pnpm/@google+generative-ai@0.24.1/node_modules/@google/generative-ai/dist/src/gen-ai.d.ts
-npm notice 683B src/dependency/node_modules/.pnpm/@google+generative-ai@0.24.1/node_modules/@google/generative-ai/dist/src/index.d.ts
-npm notice 927B src/dependency/node_modules/.pnpm/@google+generative-ai@0.24.1/node_modules/@google/generative-ai/dist/src/methods/chat-session-helpers.d.ts
-npm notice 2.4kB src/dependency/node_modules/.pnpm/@google+generative-ai@0.24.1/node_modules/@google/generative-ai/dist/src/methods/chat-session.d.ts
-npm notice 868B src/dependency/node_modules/.pnpm/@google+generative-ai@0.24.1/node_modules/@google/generative-ai/dist/src/methods/count-tokens.d.ts
-npm notice 1.1kB src/dependency/node_modules/.pnpm/@google+generative-ai@0.24.1/node_modules/@google/generative-ai/dist/src/methods/embed-content.d.ts
-npm notice 1.1kB src/dependency/node_modules/.pnpm/@google+generative-ai@0.24.1/node_modules/@google/generative-ai/dist/src/methods/generate-content.d.ts
-npm notice 4.1kB src/dependency/node_modules/.pnpm/@google+generative-ai@0.24.1/node_modules/@google/generative-ai/dist/src/models/generative-model.d.ts
-npm notice 1.4kB src/dependency/node_modules/.pnpm/@google+generative-ai@0.24.1/node_modules/@google/generative-ai/dist/src/requests/request-helpers.d.ts
-npm notice 2.1kB src/dependency/node_modules/.pnpm/@google+generative-ai@0.24.1/node_modules/@google/generative-ai/dist/src/requests/request.d.ts
-npm notice 1.4kB src/dependency/node_modules/.pnpm/@google+generative-ai@0.24.1/node_modules/@google/generative-ai/dist/src/requests/response-helpers.d.ts
-npm notice 1.6kB src/dependency/node_modules/.pnpm/@google+generative-ai@0.24.1/node_modules/@google/generative-ai/dist/src/requests/stream-reader.d.ts
-npm notice 1.6kB src/dependency/node_modules/.pnpm/@google+generative-ai@0.24.1/node_modules/@google/generative-ai/dist/src/server/cache-manager.d.ts
-npm notice 764B src/dependency/node_modules/.pnpm/@google+generative-ai@0.24.1/node_modules/@google/generative-ai/dist/src/server/constants.d.ts
-npm notice 2.2kB src/dependency/node_modules/.pnpm/@google+generative-ai@0.24.1/node_modules/@google/generative-ai/dist/src/server/file-manager.d.ts
-npm notice 751B src/dependency/node_modules/.pnpm/@google+generative-ai@0.24.1/node_modules/@google/generative-ai/dist/src/server/index.d.ts
-npm notice 1.7kB src/dependency/node_modules/.pnpm/@google+generative-ai@0.24.1/node_modules/@google/generative-ai/dist/src/server/request.d.ts
-npm notice 329B src/dependency/node_modules/.pnpm/@google+generative-ai@0.24.1/node_modules/@google/generative-ai/dist/tsdoc-metadata.json
-npm notice 5.9kB src/dependency/node_modules/.pnpm/@google+generative-ai@0.24.1/node_modules/@google/generative-ai/dist/types/content.d.ts
-npm notice 3.8kB src/dependency/node_modules/.pnpm/@google+generative-ai@0.24.1/node_modules/@google/generative-ai/dist/types/enums.d.ts
-npm notice 7.1kB src/dependency/node_modules/.pnpm/@google+generative-ai@0.24.1/node_modules/@google/generative-ai/dist/types/function-calling.d.ts
-npm notice 819B src/dependency/node_modules/.pnpm/@google+generative-ai@0.24.1/node_modules/@google/generative-ai/dist/types/index.d.ts
-npm notice 6.6kB src/dependency/node_modules/.pnpm/@google+generative-ai@0.24.1/node_modules/@google/generative-ai/dist/types/requests.d.ts
-npm notice 6.3kB src/dependency/node_modules/.pnpm/@google+generative-ai@0.24.1/node_modules/@google/generative-ai/dist/types/responses.d.ts
-npm notice 4.9kB src/dependency/node_modules/.pnpm/@google+generative-ai@0.24.1/node_modules/@google/generative-ai/dist/types/search-grounding.d.ts
-npm notice 3.0kB src/dependency/node_modules/.pnpm/@google+generative-ai@0.24.1/node_modules/@google/generative-ai/dist/types/server/caching.d.ts
-npm notice 2.2kB src/dependency/node_modules/.pnpm/@google+generative-ai@0.24.1/node_modules/@google/generative-ai/dist/types/server/files.d.ts
-npm notice 853B src/dependency/node_modules/.pnpm/@google+generative-ai@0.24.1/node_modules/@google/generative-ai/dist/types/server/index.d.ts
-npm notice 1.2kB src/dependency/node_modules/.pnpm/@google+generative-ai@0.24.1/node_modules/@google/generative-ai/dist/types/server/shared.d.ts
-npm notice 11.4kB src/dependency/node_modules/.pnpm/@google+generative-ai@0.24.1/node_modules/@google/generative-ai/LICENSE
-npm notice 3.3kB src/dependency/node_modules/.pnpm/@google+generative-ai@0.24.1/node_modules/@google/generative-ai/package.json
-npm notice 1.9kB src/dependency/node_modules/.pnpm/@google+generative-ai@0.24.1/node_modules/@google/generative-ai/README.md
-npm notice 271B src/dependency/node_modules/.pnpm/@google+generative-ai@0.24.1/node_modules/@google/generative-ai/server/package.json
-npm notice 439B src/dependency/node_modules/.pnpm/data-uri-to-buffer@4.0.1/node_modules/data-uri-to-buffer/dist/index.d.ts
-npm notice 1.9kB src/dependency/node_modules/.pnpm/data-uri-to-buffer@4.0.1/node_modules/data-uri-to-buffer/dist/index.js
-npm notice 1.7kB src/dependency/node_modules/.pnpm/data-uri-to-buffer@4.0.1/node_modules/data-uri-to-buffer/dist/index.js.map
-npm notice 1.4kB src/dependency/node_modules/.pnpm/data-uri-to-buffer@4.0.1/node_modules/data-uri-to-buffer/package.json
-npm notice 2.9kB src/dependency/node_modules/.pnpm/data-uri-to-buffer@4.0.1/node_modules/data-uri-to-buffer/README.md
-npm notice 1.8kB src/dependency/node_modules/.pnpm/data-uri-to-buffer@4.0.1/node_modules/data-uri-to-buffer/src/index.ts
-npm notice 17.3kB src/dependency/node_modules/.pnpm/dotenv@16.5.0/node_modules/dotenv/CHANGELOG.md
-npm notice 11B src/dependency/node_modules/.pnpm/dotenv@16.5.0/node_modules/dotenv/config.d.ts
-npm notice 176B src/dependency/node_modules/.pnpm/dotenv@16.5.0/node_modules/dotenv/config.js
-npm notice 289B src/dependency/node_modules/.pnpm/dotenv@16.5.0/node_modules/dotenv/lib/cli-options.js
-npm notice 633B src/dependency/node_modules/.pnpm/dotenv@16.5.0/node_modules/dotenv/lib/env-options.js
-npm notice 4.9kB src/dependency/node_modules/.pnpm/dotenv@16.5.0/node_modules/dotenv/lib/main.d.ts
-npm notice 10.0kB src/dependency/node_modules/.pnpm/dotenv@16.5.0/node_modules/dotenv/lib/main.js
-npm notice 1.3kB src/dependency/node_modules/.pnpm/dotenv@16.5.0/node_modules/dotenv/LICENSE
-npm notice 1.7kB src/dependency/node_modules/.pnpm/dotenv@16.5.0/node_modules/dotenv/package.json
-npm notice 16.4kB src/dependency/node_modules/.pnpm/dotenv@16.5.0/node_modules/dotenv/README-es.md
-npm notice 22.9kB src/dependency/node_modules/.pnpm/dotenv@16.5.0/node_modules/dotenv/README.md
-npm notice 102B src/dependency/node_modules/.pnpm/fetch-blob@3.2.0/node_modules/fetch-blob/file.d.ts
-npm notice 1.2kB src/dependency/node_modules/.pnpm/fetch-blob@3.2.0/node_modules/fetch-blob/file.js
-npm notice 819B src/dependency/node_modules/.pnpm/fetch-blob@3.2.0/node_modules/fetch-blob/from.d.ts
-npm notice 2.6kB src/dependency/node_modules/.pnpm/fetch-blob@3.2.0/node_modules/fetch-blob/from.js
-npm notice 102B src/dependency/node_modules/.pnpm/fetch-blob@3.2.0/node_modules/fetch-blob/index.d.ts
-npm notice 7.4kB src/dependency/node_modules/.pnpm/fetch-blob@3.2.0/node_modules/fetch-blob/index.js
-npm notice 1.1kB src/dependency/node_modules/.pnpm/fetch-blob@3.2.0/node_modules/fetch-blob/LICENSE
-npm notice 1.6kB src/dependency/node_modules/.pnpm/fetch-blob@3.2.0/node_modules/fetch-blob/package.json
-npm notice 5.1kB src/dependency/node_modules/.pnpm/fetch-blob@3.2.0/node_modules/fetch-blob/README.md
-npm notice 1.6kB src/dependency/node_modules/.pnpm/fetch-blob@3.2.0/node_modules/fetch-blob/streams.cjs
-npm notice 145B src/dependency/node_modules/.pnpm/formdata-polyfill@4.0.10/node_modules/formdata-polyfill/esm.min.d.ts
-npm notice 2.4kB src/dependency/node_modules/.pnpm/formdata-polyfill@4.0.10/node_modules/formdata-polyfill/esm.min.js
-npm notice 1.3kB src/dependency/node_modules/.pnpm/formdata-polyfill@4.0.10/node_modules/formdata-polyfill/formdata-to-blob.js
-npm notice 11.9kB src/dependency/node_modules/.pnpm/formdata-polyfill@4.0.10/node_modules/formdata-polyfill/FormData.js
-npm notice 8.9kB src/dependency/node_modules/.pnpm/formdata-polyfill@4.0.10/node_modules/formdata-polyfill/formdata.min.js
-npm notice 1.1kB src/dependency/node_modules/.pnpm/formdata-polyfill@4.0.10/node_modules/formdata-polyfill/LICENSE
-npm notice 1.3kB src/dependency/node_modules/.pnpm/formdata-polyfill@4.0.10/node_modules/formdata-polyfill/package.json
-npm notice 5.3kB src/dependency/node_modules/.pnpm/formdata-polyfill@4.0.10/node_modules/formdata-polyfill/README.md
-npm notice 2.4kB src/dependency/node_modules/.pnpm/lock.yaml
-npm notice 0B src/dependency/node_modules/.pnpm/node-domexception@1.0.0/node_modules/node-domexception/.history/index_20210527203842.js
-npm notice 262B src/dependency/node_modules/.pnpm/node-domexception@1.0.0/node_modules/node-domexception/.history/index_20210527203947.js
-npm notice 279B src/dependency/node_modules/.pnpm/node-domexception@1.0.0/node_modules/node-domexception/.history/index_20210527204259.js
-npm notice 305B src/dependency/node_modules/.pnpm/node-domexception@1.0.0/node_modules/node-domexception/.history/index_20210527204418.js
-npm notice 384B src/dependency/node_modules/.pnpm/node-domexception@1.0.0/node_modules/node-domexception/.history/index_20210527204756.js
-npm notice 395B src/dependency/node_modules/.pnpm/node-domexception@1.0.0/node_modules/node-domexception/.history/index_20210527204833.js
-npm notice 446B src/dependency/node_modules/.pnpm/node-domexception@1.0.0/node_modules/node-domexception/.history/index_20210527211208.js
-npm notice 448B src/dependency/node_modules/.pnpm/node-domexception@1.0.0/node_modules/node-domexception/.history/index_20210527211248.js
-npm notice 780B src/dependency/node_modules/.pnpm/node-domexception@1.0.0/node_modules/node-domexception/.history/index_20210527212722.js
-npm notice 780B src/dependency/node_modules/.pnpm/node-domexception@1.0.0/node_modules/node-domexception/.history/index_20210527212731.js
-npm notice 448B src/dependency/node_modules/.pnpm/node-domexception@1.0.0/node_modules/node-domexception/.history/index_20210527212746.js
-npm notice 474B src/dependency/node_modules/.pnpm/node-domexception@1.0.0/node_modules/node-domexception/.history/index_20210527212900.js
-npm notice 497B src/dependency/node_modules/.pnpm/node-domexception@1.0.0/node_modules/node-domexception/.history/index_20210527213022.js
-npm notice 500B src/dependency/node_modules/.pnpm/node-domexception@1.0.0/node_modules/node-domexception/.history/index_20210527213822.js
-npm notice 508B src/dependency/node_modules/.pnpm/node-domexception@1.0.0/node_modules/node-domexception/.history/index_20210527213843.js
-npm notice 510B src/dependency/node_modules/.pnpm/node-domexception@1.0.0/node_modules/node-domexception/.history/index_20210527213852.js
-npm notice 461B src/dependency/node_modules/.pnpm/node-domexception@1.0.0/node_modules/node-domexception/.history/index_20210527213910.js
-npm notice 461B src/dependency/node_modules/.pnpm/node-domexception@1.0.0/node_modules/node-domexception/.history/index_20210527214034.js
-npm notice 1.2kB src/dependency/node_modules/.pnpm/node-domexception@1.0.0/node_modules/node-domexception/.history/index_20210527214643.js
-npm notice 1.2kB src/dependency/node_modules/.pnpm/node-domexception@1.0.0/node_modules/node-domexception/.history/index_20210527214654.js
-npm notice 461B src/dependency/node_modules/.pnpm/node-domexception@1.0.0/node_modules/node-domexception/.history/index_20210527214700.js
-npm notice 537B src/dependency/node_modules/.pnpm/node-domexception@1.0.0/node_modules/node-domexception/.history/package_20210527203733.json
-npm notice 478B src/dependency/node_modules/.pnpm/node-domexception@1.0.0/node_modules/node-domexception/.history/package_20210527203825.json
-npm notice 521B src/dependency/node_modules/.pnpm/node-domexception@1.0.0/node_modules/node-domexception/.history/package_20210527204621.json
-npm notice 633B src/dependency/node_modules/.pnpm/node-domexception@1.0.0/node_modules/node-domexception/.history/package_20210527204913.json
-npm notice 633B src/dependency/node_modules/.pnpm/node-domexception@1.0.0/node_modules/node-domexception/.history/package_20210527204925.json
-npm notice 716B src/dependency/node_modules/.pnpm/node-domexception@1.0.0/node_modules/node-domexception/.history/package_20210527205145.json
-npm notice 716B src/dependency/node_modules/.pnpm/node-domexception@1.0.0/node_modules/node-domexception/.history/package_20210527205156.json
-npm notice 76B src/dependency/node_modules/.pnpm/node-domexception@1.0.0/node_modules/node-domexception/.history/README_20210527203617.md
-npm notice 1.7kB src/dependency/node_modules/.pnpm/node-domexception@1.0.0/node_modules/node-domexception/.history/README_20210527212714.md
-npm notice 1.5kB src/dependency/node_modules/.pnpm/node-domexception@1.0.0/node_modules/node-domexception/.history/README_20210527213345.md
-npm notice 1.5kB src/dependency/node_modules/.pnpm/node-domexception@1.0.0/node_modules/node-domexception/.history/README_20210527213411.md
-npm notice 1.6kB src/dependency/node_modules/.pnpm/node-domexception@1.0.0/node_modules/node-domexception/.history/README_20210527213803.md
-npm notice 1.7kB src/dependency/node_modules/.pnpm/node-domexception@1.0.0/node_modules/node-domexception/.history/README_20210527214323.md
-npm notice 1.7kB src/dependency/node_modules/.pnpm/node-domexception@1.0.0/node_modules/node-domexception/.history/README_20210527214408.md
-npm notice 0B src/dependency/node_modules/.pnpm/node-domexception@1.0.0/node_modules/node-domexception/.history/test_20210527205603.js
-npm notice 64B src/dependency/node_modules/.pnpm/node-domexception@1.0.0/node_modules/node-domexception/.history/test_20210527205957.js
-npm notice 63B src/dependency/node_modules/.pnpm/node-domexception@1.0.0/node_modules/node-domexception/.history/test_20210527210021.js
-npm notice 461B src/dependency/node_modules/.pnpm/node-domexception@1.0.0/node_modules/node-domexception/index.js
-npm notice 1.1kB src/dependency/node_modules/.pnpm/node-domexception@1.0.0/node_modules/node-domexception/LICENSE
-npm notice 716B src/dependency/node_modules/.pnpm/node-domexception@1.0.0/node_modules/node-domexception/package.json
-npm notice 2.0kB src/dependency/node_modules/.pnpm/node-domexception@1.0.0/node_modules/node-domexception/README.md
-npm notice 6.6kB src/dependency/node_modules/.pnpm/node-fetch@3.3.2/node_modules/node-fetch/@types/index.d.ts
-npm notice 1.1kB src/dependency/node_modules/.pnpm/node-fetch@3.3.2/node_modules/node-fetch/LICENSE.md
-npm notice 3.0kB src/dependency/node_modules/.pnpm/node-fetch@3.3.2/node_modules/node-fetch/package.json
-npm notice 29.1kB src/dependency/node_modules/.pnpm/node-fetch@3.3.2/node_modules/node-fetch/README.md
-npm notice 9.8kB src/dependency/node_modules/.pnpm/node-fetch@3.3.2/node_modules/node-fetch/src/body.js
-npm notice 218B src/dependency/node_modules/.pnpm/node-fetch@3.3.2/node_modules/node-fetch/src/errors/abort-error.js
-npm notice 346B src/dependency/node_modules/.pnpm/node-fetch@3.3.2/node_modules/node-fetch/src/errors/base.js
-npm notice 871B src/dependency/node_modules/.pnpm/node-fetch@3.3.2/node_modules/node-fetch/src/errors/fetch-error.js
-npm notice 6.9kB src/dependency/node_modules/.pnpm/node-fetch@3.3.2/node_modules/node-fetch/src/headers.js
-npm notice 12.9kB src/dependency/node_modules/.pnpm/node-fetch@3.3.2/node_modules/node-fetch/src/index.js
-npm notice 8.6kB src/dependency/node_modules/.pnpm/node-fetch@3.3.2/node_modules/node-fetch/src/request.js
-npm notice 3.4kB src/dependency/node_modules/.pnpm/node-fetch@3.3.2/node_modules/node-fetch/src/response.js
-npm notice 296B src/dependency/node_modules/.pnpm/node-fetch@3.3.2/node_modules/node-fetch/src/utils/get-search.js
-npm notice 229B src/dependency/node_modules/.pnpm/node-fetch@3.3.2/node_modules/node-fetch/src/utils/is-redirect.js
-npm notice 2.2kB src/dependency/node_modules/.pnpm/node-fetch@3.3.2/node_modules/node-fetch/src/utils/is.js
-npm notice 9.6kB src/dependency/node_modules/.pnpm/node-fetch@3.3.2/node_modules/node-fetch/src/utils/multipart-parser.js
-npm notice 11.8kB src/dependency/node_modules/.pnpm/node-fetch@3.3.2/node_modules/node-fetch/src/utils/referrer.js
-npm notice 217.3kB src/dependency/node_modules/.pnpm/web-streams-polyfill@3.3.3/node_modules/web-streams-polyfill/dist/polyfill.es6.js
-npm notice 432.1kB src/dependency/node_modules/.pnpm/web-streams-polyfill@3.3.3/node_modules/web-streams-polyfill/dist/polyfill.es6.js.map
-npm notice 65.8kB src/dependency/node_modules/.pnpm/web-streams-polyfill@3.3.3/node_modules/web-streams-polyfill/dist/polyfill.es6.min.js
-npm notice 371.1kB src/dependency/node_modules/.pnpm/web-streams-polyfill@3.3.3/node_modules/web-streams-polyfill/dist/polyfill.es6.min.js.map
-npm notice 197.5kB src/dependency/node_modules/.pnpm/web-streams-polyfill@3.3.3/node_modules/web-streams-polyfill/dist/polyfill.es6.mjs
-npm notice 431.9kB src/dependency/node_modules/.pnpm/web-streams-polyfill@3.3.3/node_modules/web-streams-polyfill/dist/polyfill.es6.mjs.map
-npm notice 213.1kB src/dependency/node_modules/.pnpm/web-streams-polyfill@3.3.3/node_modules/web-streams-polyfill/dist/polyfill.es2018.js
-npm notice 408.6kB src/dependency/node_modules/.pnpm/web-streams-polyfill@3.3.3/node_modules/web-streams-polyfill/dist/polyfill.es2018.js.map
-npm notice 64.1kB src/dependency/node_modules/.pnpm/web-streams-polyfill@3.3.3/node_modules/web-streams-polyfill/dist/polyfill.es2018.min.js
-npm notice 349.6kB src/dependency/node_modules/.pnpm/web-streams-polyfill@3.3.3/node_modules/web-streams-polyfill/dist/polyfill.es2018.min.js.map
-npm notice 193.5kB src/dependency/node_modules/.pnpm/web-streams-polyfill@3.3.3/node_modules/web-streams-polyfill/dist/polyfill.es2018.mjs
-npm notice 408.4kB src/dependency/node_modules/.pnpm/web-streams-polyfill@3.3.3/node_modules/web-streams-polyfill/dist/polyfill.es2018.mjs.map
-npm notice 232.2kB src/dependency/node_modules/.pnpm/web-streams-polyfill@3.3.3/node_modules/web-streams-polyfill/dist/polyfill.js
-npm notice 444.7kB src/dependency/node_modules/.pnpm/web-streams-polyfill@3.3.3/node_modules/web-streams-polyfill/dist/polyfill.js.map
-npm notice 71.5kB src/dependency/node_modules/.pnpm/web-streams-polyfill@3.3.3/node_modules/web-streams-polyfill/dist/polyfill.min.js
-npm notice 377.2kB src/dependency/node_modules/.pnpm/web-streams-polyfill@3.3.3/node_modules/web-streams-polyfill/dist/polyfill.min.js.map
-npm notice 211.6kB src/dependency/node_modules/.pnpm/web-streams-polyfill@3.3.3/node_modules/web-streams-polyfill/dist/polyfill.mjs
-npm notice 444.4kB src/dependency/node_modules/.pnpm/web-streams-polyfill@3.3.3/node_modules/web-streams-polyfill/dist/polyfill.mjs.map
-npm notice 216.5kB src/dependency/node_modules/.pnpm/web-streams-polyfill@3.3.3/node_modules/web-streams-polyfill/dist/ponyfill.es6.js
-npm notice 430.3kB src/dependency/node_modules/.pnpm/web-streams-polyfill@3.3.3/node_modules/web-streams-polyfill/dist/ponyfill.es6.js.map
-npm notice 196.7kB src/dependency/node_modules/.pnpm/web-streams-polyfill@3.3.3/node_modules/web-streams-polyfill/dist/ponyfill.es6.mjs
-npm notice 430.1kB src/dependency/node_modules/.pnpm/web-streams-polyfill@3.3.3/node_modules/web-streams-polyfill/dist/ponyfill.es6.mjs.map
-npm notice 212.2kB src/dependency/node_modules/.pnpm/web-streams-polyfill@3.3.3/node_modules/web-streams-polyfill/dist/ponyfill.es2018.js
-npm notice 406.8kB src/dependency/node_modules/.pnpm/web-streams-polyfill@3.3.3/node_modules/web-streams-polyfill/dist/ponyfill.es2018.js.map
-npm notice 192.7kB src/dependency/node_modules/.pnpm/web-streams-polyfill@3.3.3/node_modules/web-streams-polyfill/dist/ponyfill.es2018.mjs
-npm notice 406.6kB src/dependency/node_modules/.pnpm/web-streams-polyfill@3.3.3/node_modules/web-streams-polyfill/dist/ponyfill.es2018.mjs.map
-npm notice 231.0kB src/dependency/node_modules/.pnpm/web-streams-polyfill@3.3.3/node_modules/web-streams-polyfill/dist/ponyfill.js
-npm notice 442.7kB src/dependency/node_modules/.pnpm/web-streams-polyfill@3.3.3/node_modules/web-streams-polyfill/dist/ponyfill.js.map
-npm notice 210.5kB src/dependency/node_modules/.pnpm/web-streams-polyfill@3.3.3/node_modules/web-streams-polyfill/dist/ponyfill.mjs
-npm notice 442.4kB src/dependency/node_modules/.pnpm/web-streams-polyfill@3.3.3/node_modules/web-streams-polyfill/dist/ponyfill.mjs.map
-npm notice 1.3kB src/dependency/node_modules/.pnpm/web-streams-polyfill@3.3.3/node_modules/web-streams-polyfill/dist/types/polyfill.d.ts
-npm notice 34.5kB src/dependency/node_modules/.pnpm/web-streams-polyfill@3.3.3/node_modules/web-streams-polyfill/dist/types/ponyfill.d.ts
-npm notice 1.2kB src/dependency/node_modules/.pnpm/web-streams-polyfill@3.3.3/node_modules/web-streams-polyfill/dist/types/ts3.6/polyfill.d.ts
-npm notice 33.8kB src/dependency/node_modules/.pnpm/web-streams-polyfill@3.3.3/node_modules/web-streams-polyfill/dist/types/ts3.6/ponyfill.d.ts
-npm notice 329B src/dependency/node_modules/.pnpm/web-streams-polyfill@3.3.3/node_modules/web-streams-polyfill/dist/types/tsdoc-metadata.json
-npm notice 315B src/dependency/node_modules/.pnpm/web-streams-polyfill@3.3.3/node_modules/web-streams-polyfill/es6/package.json
-npm notice 327B src/dependency/node_modules/.pnpm/web-streams-polyfill@3.3.3/node_modules/web-streams-polyfill/es2018/package.json
-npm notice 1.1kB src/dependency/node_modules/.pnpm/web-streams-polyfill@3.3.3/node_modules/web-streams-polyfill/LICENSE
-npm notice 2.7kB src/dependency/node_modules/.pnpm/web-streams-polyfill@3.3.3/node_modules/web-streams-polyfill/package.json
-npm notice 286B src/dependency/node_modules/.pnpm/web-streams-polyfill@3.3.3/node_modules/web-streams-polyfill/ponyfill/es6/package.json
-npm notice 295B src/dependency/node_modules/.pnpm/web-streams-polyfill@3.3.3/node_modules/web-streams-polyfill/ponyfill/es2018/package.json
-npm notice 259B src/dependency/node_modules/.pnpm/web-streams-polyfill@3.3.3/node_modules/web-streams-polyfill/ponyfill/package.json
-npm notice 6.5kB src/dependency/node_modules/.pnpm/web-streams-polyfill@3.3.3/node_modules/web-streams-polyfill/README.md
-npm notice 262B src/dependency/package.json
-npm notice 2.4kB src/dependency/pnpm-lock.yaml
-npm notice 4.7kB src/git/git.js
-npm notice 2.3kB src/git/gitignore-manager.cjs
-npm notice 17.0kB src/index.js
-npm notice 10.9kB src/providers.js
-npm notice 5.1kB src/security/json-size-limiter.js
-npm notice 5.0kB src/security/security.js
-npm notice 5.1kB src/setup.js
-npm notice 12.6kB src/token-utils.js
-npm notice 1.6kB src/utils/check-models.js
-npm notice 5.3kB src/utils/config.js
-npm notice 1.2kB src/utils/debug-api.js
-npm notice 3.3kB src/utils/formatting.js
-npm notice 1.2kB wrappers/cli-runner.cjs
-npm notice 1.3kB wrappers/pushscript.cjs
-npm notice Tarball Details
-npm notice name: pushscript
-npm notice version: 0.1.0
-npm notice filename: pushscript-0.1.0.tgz
-npm notice package size: 1.8 MB
-npm notice unpacked size: 9.8 MB
-npm notice shasum: d82fcf5de4a3749dbda47d1dbf1f7eb535c1c80c
-npm notice integrity: sha512-fUvA71I8CoRjc[...]SL2/6OiHTqTlg==
-npm notice total files: 244
-npm notice
-pushscript-0.1.0.tgz
-betatable@Mac pushscript-v01 % 
+2.1 Command‑line reference
+
+Run pushscript --help anytime to see all flags. Common examples:
+
+Use‑case
+
+Command
+
+Custom commit message
+
+pushscript "feat: add search API"
+
+Commit only (no push)
+
+pushscript commit
+
+Specify remote branch
+
+pushscript "refactor: cleanup" staging
+
+Push to main quickly
+
+pushscript --main
+
+Dry‑run (no network calls)
+
+pushscript --dry
+
+All flags work identically when invoked via npm run push.
