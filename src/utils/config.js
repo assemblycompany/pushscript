@@ -99,9 +99,6 @@ let envFileLoaded = false;
 
 // Add debug info about where we're looking
 logConfig(`Looking for environment files in these locations (in order of priority):`);
-possibleEnvFiles.forEach((envPath, index) => {
-  logConfig(`  ${index + 1}. ${envPath} ${fs.existsSync(envPath) ? '(exists)' : '(not found)'}`);
-});
 
 // Try each possible env file location
 for (const envPath of possibleEnvFiles) {
