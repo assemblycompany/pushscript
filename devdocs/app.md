@@ -1,29 +1,17 @@
 {
   "name": "pushscript",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "AI-powered Git workflow automation with conventional commits, vulnerability scanning, and multi-provider LLM support",
   "type": "module",
-  "main": "./src/cli.js",
+  "main": "./cli.js",
   "bin": {
-    "pushscript": "./wrappers/pushscript.cjs"
+    "pushscript": "./pushscript.js"
   },
   "files": [
-    "src/cli.js",
-    "src/index.js",
-    "src/providers.js",
-    "src/setup.js",
-    "src/token-utils.js",
-    "src/git/",
-    "src/security/",
-    "src/utils/",
-    "src/dependency/*.js",
-    "src/dependency/*.cjs",
-    "src/dependency/package.json",
-    "wrappers/",
-    ".npmrc",
-    ".env.example",
-    "LICENSE",
-    "README.md"
+    "cli.js",
+    "scripts/",
+    "README.md",
+    "LICENSE"
   ],
   "engines": {
     "node": ">=18.0.0"
@@ -42,33 +30,26 @@
     "commit-messages"
   ],
   "license": "MIT",
-  "author": "PushScript Team <hi@pushscript.dev>",
+  "author": "Rust Toshi <hi@pushscript.dev>",
   "repository": {
     "type": "git",
     "url": "https://github.com/caterpillarC15/pushscript.git"
   },
-  "homepage": "https://pushscript.dev",
+  "homepage": "https://github.com/caterpillarC15/pushscript#readme",
   "bugs": {
     "url": "https://github.com/caterpillarC15/pushscript/issues"
   },
   "scripts": {
-    "push": "pushscript",
-    "commit": "pushscript commit",
-    "pushscript": "pushscript",
-    "push:dev": "git checkout -b dev 2>/dev/null || git checkout dev && pushscript",
-    "setup:hooks": "node scripts/setup-git-hooks.js",
-    "clean:devdocs": "rm -rf devdocs",
-    "restore:devdocs": "git checkout HEAD~1 -- devdocs/ 2>/dev/null || echo 'devdocs restored from git'",
-    "test": "node --test test/",
+    "test": "echo \"No tests yet\" && exit 0",
     "lint": "echo \"No linting configured yet\"",
     "prepublishOnly": "npm run test"
   },
   "dependencies": {
-    "@google/generative-ai": "^0.24.1",
     "dotenv": "^16.5.0",
     "node-fetch": "^3.3.2"
   },
   "optionalDependencies": {
+    "@google/generative-ai": "^1.0.0",
     "@anthropic-ai/sdk": "^0.12.0",
     "openai": "^4.23.0",
     "groq-sdk": "^0.1.1"
