@@ -46,11 +46,11 @@
   "author": "PushScript Team <hi@pushscript.dev>",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/caterpillarC15/pushscript.git"
+    "url": "git+https://github.com/assemblycompany/pushscript.git"
   },
   "homepage": "https://pushscript.dev",
   "bugs": {
-    "url": "https://github.com/caterpillarC15/pushscript/issues"
+    "url": "https://github.com/assemblycompany/pushscript/issues"
   },
   "scripts": {
     "push": "pushscript",
