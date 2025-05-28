@@ -7,17 +7,21 @@
 import path from 'path';
 import { commit, push } from './index.js';
 import { displayHelp } from './utils/formatting.js';
+import { runAutoPackageSetup } from './setup/auto-package.js';
 
 // Parse command line arguments
 function parseArgs() {
   const args = process.argv.slice(2);
   let message = null;
   let branch = null;
+  let command = null;
   
   for (let i = 0; i < args.length; i++) {
     const arg = args[i];
     if (arg === '--help' || arg === '-h') {
       displayHelp();
+    } else if (arg === 'setup') {
+      command = 'setup';
     } else if (arg === '--main') {
       branch = 'main';
     } else if (arg === '--dev') {
@@ -37,7 +41,7 @@ function parseArgs() {
     }
   }
   
-  return { message, branch };
+  return { message, branch, command };
 }
 
 // Execute the appropriate command based on script name
@@ -46,10 +50,12 @@ async function main() {
   const scriptName = path.basename(process.argv[1]);
   const commandName = path.basename(scriptName, '.js');
   
-  const { message, branch } = parseArgs();
+  const { message, branch, command } = parseArgs();
   
   try {
-    if (commandName === 'commit') {
+    if (command === 'setup') {
+      await runAutoPackageSetup();
+    } else if (commandName === 'commit') {
       await commit(message);
     } else {
       await push(message, branch);
