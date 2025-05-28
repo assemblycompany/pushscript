@@ -121,7 +121,7 @@ ${colorize('Usage:', 'green')}
 ${colorize('Commands:', 'green')}
   setup            Add convenient npm scripts to your package.json
   commit           Commit only (no push) with AI-generated message
-  
+
 ${colorize('Options:', 'green')}
   --help           Show this help message
   --main           Push to main branch

@@ -5,7 +5,7 @@ All notable changes to PushScript will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.1.0] - 2025-01-28
+## [0.2.0] - 2025-01-28
 
 ### Added
 - **🤖 Multi-Provider AI Support**: Support for Groq, OpenAI, Anthropic Claude, and Google Gemini
@@ -93,14 +93,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Future Releases
 
-### Planned for v0.2.0
+### Planned for v0.3.0
 - GitHub integration for pull request automation
 - Custom commit templates
 - Branch-specific configuration
 - Commit message history and learning
 - Plugin system for extensibility
 
-### Planned for v0.3.0
+### Planned for v0.4.0
 - Web dashboard for team configuration
 - Commit analytics and insights
 - Integration with popular IDEs

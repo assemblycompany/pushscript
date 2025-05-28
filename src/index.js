@@ -163,8 +163,8 @@ Keep the first line under 80 characters.`;
       if (validationRules.require_conventional) {
         const conventionalRegex = new RegExp(`^(${validationRules.allowed_types.join('|')})(\\([a-z-]+\\))?: .+`);
         if (!conventionalRegex.test(firstLine)) {
-          logWarning('AI generated message first line does not match conventional format, falling back to standard generation');
-          return generateSimpleCommitMessage(changes);
+        logWarning('AI generated message first line does not match conventional format, falling back to standard generation');
+        return generateSimpleCommitMessage(changes);
         }
       }
 
