@@ -20,6 +20,8 @@ import { colorize, logInfo, logSuccess, logWarning, logError, logTitle, logList,
 // Import new Gemini token manager
 import { GeminiDiffOptimizer, createGeminiManager } from './token-utils.js';
 import { handleLargeJsonFiles } from './security/json-size-limiter.js';
+// Import config system
+import { getCommitStyle, getValidationRules } from './utils/pushscript-config.js';
 
 // Setup for ESM
 const __filename = fileURLToPath(import.meta.url);
@@ -77,8 +79,8 @@ async function generateAICommitMessage(changes) {
     }
 
     // Create the prompt with the optimized diff
-    const prompt = `As a senior developer, create a concise git commit message for these changes.
-Focus on the key changes and their purpose. Keep it brief but informative.
+    const baseCommitStyle = getCommitStyle();
+    const prompt = `${baseCommitStyle}
 
 Changes Overview:
 ${changesDescription}
@@ -155,13 +157,20 @@ Keep the first line under 80 characters.`;
       
       // Validate the message format - allowing for more detailed messages
       const firstLine = message.split('\n')[0];
-      if (!/^(feat|fix|docs|style|refactor|perf|test|chore)(\([a-z-]+\))?: .+/.test(firstLine)) {
-        logWarning('AI generated message first line does not match conventional format, falling back to standard generation');
-        return generateSimpleCommitMessage(changes);
+      const validationRules = getValidationRules();
+      
+      // Check conventional commit format if required
+      if (validationRules.require_conventional) {
+        const conventionalRegex = new RegExp(`^(${validationRules.allowed_types.join('|')})(\\([a-z-]+\\))?: .+`);
+        if (!conventionalRegex.test(firstLine)) {
+          logWarning('AI generated message first line does not match conventional format, falling back to standard generation');
+          return generateSimpleCommitMessage(changes);
+        }
       }
 
-      if (firstLine.length > 80) {
-        logWarning('AI generated message first line exceeds 80 characters, falling back to standard generation');
+      // Check length limit
+      if (firstLine.length > validationRules.max_length) {
+        logWarning(`AI generated message first line exceeds ${validationRules.max_length} characters, falling back to standard generation`);
         return generateSimpleCommitMessage(changes);
       }
 
