@@ -109,13 +109,19 @@ export function logList(items, color = 'white') {
  */
 export function displayHelp() {
   console.log(`
-${colorize('PushScript - Git Push Helper', 'cyan')}
+${colorize('PushScript - AI-Powered Git Workflow Automation', 'cyan')}
 
 ${colorize('Usage:', 'green')}
-  push [message] [branch]
-  push main
-  push dev
+  pushscript [message] [branch]
+  pushscript commit [message]
+  pushscript setup
+  pushscript main
+  pushscript dev
 
+${colorize('Commands:', 'green')}
+  setup            Add convenient npm scripts to your package.json
+  commit           Commit only (no push) with AI-generated message
+  
 ${colorize('Options:', 'green')}
   --help           Show this help message
   --main           Push to main branch
@@ -127,11 +133,27 @@ ${colorize('Environment Variables:', 'green')}
   PUSHSCRIPT_LLM_MODEL        Model to use with the selected provider
 
 ${colorize('Examples:', 'green')}
-  push                     # Commit & push to current branch with AI-generated message
-  push "fix bug"           # Commit with specified message & push to current branch
-  push main                # Commit & push to main branch 
-  push dev                 # Commit & push to dev branch
-  push "new feature" dev   # Commit with message & push to dev branch
+  pushscript setup             # Add npm scripts to package.json
+  pushscript                   # Commit & push to main with AI-generated message
+  pushscript commit            # Commit only with AI-generated message
+  pushscript "fix bug"         # Commit with specified message & push to main
+  pushscript main              # Commit & push to main branch 
+  pushscript dev               # Commit & push to dev branch
+  pushscript "new feature" dev # Commit with message & push to dev branch
+
+${colorize('Add Shortcuts to package.json:', 'green')}
+  Run "pushscript setup" or manually add these to your package.json:
+  
+  "scripts": {
+    "push": "pushscript",
+    "commit": "pushscript commit",
+    "pushscript": "pushscript"
+  }
+
+${colorize('After adding shortcuts:', 'green')}
+  npm run push                 # Same as pushscript
+  npm run commit               # Same as pushscript commit
+  npm run pushscript           # Same as pushscript
   `);
   process.exit(0);
 } 
