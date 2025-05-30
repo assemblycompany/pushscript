@@ -112,20 +112,21 @@ If you skip `npm install`, set `PUSHSCRIPT_SELF_HEAL=true`. The wrapper will ins
 
 ## 7 · Troubleshooting
 
-| Symptom                  | Fix                                                                   |
-| ------------------------ | --------------------------------------------------------------------- |
-| **`MODEL_NOT_FOUND`**    | Run `node src/utils/check-models.js` to list models for your API key. |
-| **Missing module error** | `npm install` or `PUSHSCRIPT_SELF_HEAL=true`.                         |
-| **Network timeout**      | Check VPN/firewall; PushScript needs outbound HTTPS.                  |
+| Symptom                            | Fix                                                                   |
+| ---------------------------------- | --------------------------------------------------------------------- |
+| **`MODEL_NOT_FOUND`**              | Run `node src/utils/check-models.js` to list models for your API key. |
+| **Missing module error**           | `npm install` or `PUSHSCRIPT_SELF_HEAL=true`.                         |
+| **`Cannot find module auto-package.js`** | Update global installation: `npm update -g pushscript` or `pnpm update -g pushscript` |
+| **Network timeout**                | Check VPN/firewall; PushScript needs outbound HTTPS.                  |
 
 ---
 
 ## 8 · Roadmap
 
-* **v0.1** – open‑core JS/TS CLI *(today)*
-* **v0.2** – Python dependency scan
-* **v0.3** – GitHub App with org dashboard
-* **v0.4** – VS Code extension
+* **v0.2** – Enhanced JS/TS CLI with bug fixes *(current)*
+* **v0.3** – Python dependency scan
+* **v0.4** – GitHub App with org dashboard
+* **v0.5** – VS Code extension
   Star ⭐ the repo to follow releases.
 
 ---
