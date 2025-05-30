@@ -12,6 +12,7 @@
     "src/index.js",
     "src/providers.js",
     "src/setup.js",
+    "src/setup/",
     "src/token-utils.js",
     "src/git/",
     "src/security/",
