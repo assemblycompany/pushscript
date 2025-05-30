@@ -27,6 +27,23 @@ npx pushscript@latest                # generates a commit + push helper
 
 ---
 
+## 2.1 · Global installation (optional)
+
+For permanent installation across all projects:
+
+```bash
+# npm users
+npm install -g pushscript@latest
+
+# pnpm users  
+pnpm add -g pushscript@latest
+
+# Then use anywhere
+pushscript --help
+```
+
+---
+
 ## 3 · Project‑level integration
 
 ```json
@@ -116,7 +133,7 @@ If you skip `npm install`, set `PUSHSCRIPT_SELF_HEAL=true`. The wrapper will ins
 | ---------------------------------- | --------------------------------------------------------------------- |
 | **`MODEL_NOT_FOUND`**              | Run `node src/utils/check-models.js` to list models for your API key. |
 | **Missing module error**           | `npm install` or `PUSHSCRIPT_SELF_HEAL=true`.                         |
-| **`Cannot find module auto-package.js`** | Update global installation: `npm update -g pushscript` or `pnpm update -g pushscript` |
+| **`Cannot find module auto-package.js`** | Update: `npm update -g pushscript` / `pnpm update -g pushscript` OR reinstall: `npm install -g pushscript@latest` / `pnpm add -g pushscript@latest` |
 | **Network timeout**                | Check VPN/firewall; PushScript needs outbound HTTPS.                  |
 
 ---
