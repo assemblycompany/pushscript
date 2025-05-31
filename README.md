@@ -44,6 +44,36 @@ pushscript --help
 
 ---
 
+## 2.2 · Auto-setup for team projects
+
+Add convenient npm scripts to any project automatically:
+
+```bash
+pushscript setup
+```
+
+This will interactively ask to add these shortcuts to your `package.json`:
+
+```json
+{
+  "scripts": {
+    "push": "pushscript",           // commit + push with AI message
+    "commit": "pushscript commit",  // commit only with AI message  
+    "pushscript": "pushscript"      // direct CLI access
+  }
+}
+```
+
+**Features:**
+- 🤖 **CI-aware** - Skips prompts in automated environments
+- 🛡️ **Safe** - Won't overwrite existing scripts
+- ⚡ **One-time** - Remembers your choice with `.pushscript-setup` marker
+- 👥 **Team-friendly** - Each team member can choose their preference
+
+After setup, teammates can use: `npm run push`, `npm run commit`, etc.
+
+---
+
 ## 3 · Project‑level integration
 
 ```json
@@ -97,6 +127,7 @@ Run `pushscript --help` or `npx pushscript --help` to see all flags.
 | Commit only                     | `pushscript commit`           |
 | Push to main                    | `pushscript --main`           |
 | Push to a branch name           | `pushscript "feat: ui" dev`   |
+| **Add npm scripts to project**  | `pushscript setup`            |
 | Dry‑run (no network)            | `pushscript --dry`            |
 
 Environment variables summary:
