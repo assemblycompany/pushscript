@@ -114,6 +114,59 @@ GEMINI_PUSHSCRIPT_MODEL=gemini-2.0-flash  # optional
 
 Just flip `PUSHSCRIPT_LLM_PROVIDER` and add the key—PushScript picks the model automatically.
 
+### 4.2 · Configuration files (advanced)
+
+PushScript supports custom configuration files to override defaults. Create one of these files in your project root:
+
+**Supported formats (priority order):**
+- `.pushscript.json`
+- `.pushscript.yml` 
+- `.pushscript.yaml`
+- `package.json` (in `pushscript` field)
+
+**Example `.pushscript.json`:**
+```json
+{
+  "commit_style": "As a fintech expert, create concise commit messages focusing on business impact and technical precision.",
+  "patterns": [
+    {
+      "path": "api/**",
+      "scope": "api",
+      "type_hint": "feat"
+    },
+    {
+      "path": "frontend/**", 
+      "scope": "ui",
+      "type_hint": "feat"
+    }
+  ],
+  "validation": {
+    "max_length": 72,
+    "require_conventional": true,
+    "allowed_types": ["feat", "fix", "docs", "refactor", "perf", "test", "chore", "hotfix"]
+  }
+}
+```
+
+**Example `package.json` field:**
+```json
+{
+  "name": "my-app",
+  "pushscript": {
+    "commit_style": "Custom AI prompt...",
+    "validation": {
+      "max_length": 100
+    }
+  }
+}
+```
+
+**Features:**
+- 🔍 **Hierarchical search** - Searches up directory tree to find config
+- 🧩 **Smart merging** - Partial configs merge with sensible defaults  
+- 🎯 **Pattern-based** - Different rules for different file paths
+- ⚡ **Hot reload** - Changes take effect immediately
+
 ---
 
 ## 5 · CLI reference
