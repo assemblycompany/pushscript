@@ -24,7 +24,16 @@ function runCliScript(args) {
   
   // Run the actual pushscript CLI using Node's ESM loader
   try {
-    execSync(`node --experimental-specifier-resolution=node --experimental-modules ${cliPath} ${args.join(' ')}`, {
+    // Properly escape arguments to preserve shell quoting
+    const escapedArgs = args.map(arg => {
+      // If arg contains spaces or quotes, wrap in quotes and escape internal quotes
+      if (arg.includes(' ') || arg.includes('"') || arg.includes("'")) {
+        return `"${arg.replace(/"/g, '\\"')}"`;
+      }
+      return arg;
+    }).join(' ');
+    
+    execSync(`node --experimental-specifier-resolution=node --experimental-modules ${cliPath} ${escapedArgs}`, {
       stdio: 'inherit'
     });
     return true;

@@ -37,6 +37,7 @@ function parseArgs() {
   
   for (let i = 0; i < args.length; i++) {
     const arg = args[i];
+    
     if (arg === '--help' || arg === '-h') {
       displayHelp();
     } else if (arg === '--version' || arg === '-v') {
