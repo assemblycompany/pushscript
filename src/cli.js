@@ -5,9 +5,28 @@
  */
 
 import path from 'path';
+import fs from 'fs';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 import { commit, push } from './index.js';
 import { displayHelp } from './utils/formatting.js';
 import { runAutoPackageSetup } from './setup/auto-package.js';
+
+// Setup for ESM
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+// Get package.json for version info
+const packageJsonPath = path.join(__dirname, '../package.json');
+const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
+
+/**
+ * Display version information
+ */
+function displayVersion() {
+  console.log(`pushscript v${packageJson.version}`);
+  process.exit(0);
+}
 
 // Parse command line arguments
 function parseArgs() {
@@ -20,6 +39,8 @@ function parseArgs() {
     const arg = args[i];
     if (arg === '--help' || arg === '-h') {
       displayHelp();
+    } else if (arg === '--version' || arg === '-v') {
+      displayVersion();
     } else if (arg === 'setup') {
       command = 'setup';
     } else if (arg === '--main') {

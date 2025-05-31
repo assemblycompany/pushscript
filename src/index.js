@@ -377,7 +377,11 @@ export async function commit(message) {
     logInfo('Creating commit...');
     try {
       const messageLines = finalCommitMessage.split('\n');
-      const messageArgs = messageLines.map(line => `-m "${line}"`).join(' ');
+      // Properly escape quotes in commit messages for shell safety
+      const messageArgs = messageLines.map(line => {
+        const escapedLine = line.replace(/"/g, '\\"');
+        return `-m "${escapedLine}"`;
+      }).join(' ');
       execSync(`git commit ${messageArgs}`);
       logSuccess('Successfully created commit!');
       return finalCommitMessage;
