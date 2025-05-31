@@ -1,164 +1,58 @@
-# PushScript Setup Guide
+# PushScript Quick Setup
 
-This guide provides instructions on how to set up and use PushScript in your project.
+Get started with PushScript in under 60 seconds.
 
-## Installation
-
-1. Make sure PushScript files are in your `scripts/pushscript/` directory
-2. Add the required dependencies to your `package.json`:
-
-```json
-"dependencies": {
-  "node-fetch": "^3.3.2",
-  "dotenv": "^16.4.5"
-}
-```
-
-3. Add the following scripts to your `package.json`:
-
-```json
-"scripts": {
-  "push": "node scripts/pushscript/pushscript.js",
-"commit": "node scripts/pushscript/pushscript.js commit",
-"pushscript": "node scripts/pushscript/pushscript.js"
-}
-```
-
-4. Make sure your `package.json` includes `"type": "module"` for ES module support:
-
-```json
-{
-  "name": "your-project",
-  "version": "1.0.0",
-  "type": "module",
-  ...
-}
-```
-
-5. Install the dependencies:
+## 🚀 Quick Install
 
 ```bash
-pnpm install
+# Global installation (recommended)
+npm install -g pushscript@latest
+# or
+pnpm add -g pushscript@latest
+
+# One-time use
+npx pushscript@latest
 ```
 
-6. Set up the Git pre-commit hook:
+## ⚙️ Basic Configuration
+
+1. **Get an API key** (free options available):
+   - [Gemini](https://makersuite.google.com/app/apikey) (recommended, free)
+   - [Groq](https://console.groq.com/keys) (fast, free tier)
+   - [OpenAI](https://platform.openai.com/api-keys) (paid)
+
+2. **Set environment variable**:
+   ```bash
+   # Add to .env.local or .env
+   GEMINI_API_KEY=your-key-here
+   ```
+
+## 📦 Add to Project
 
 ```bash
-# Create the pre-commit hook file
-mkdir -p .git/hooks
-cat > .git/hooks/pre-commit << 'EOL'
-#!/bin/sh
-# Pre-commit hook to check for large JSON files and other security issues
-
-# Get the project root directory
-PROJECT_ROOT=$(git rev-parse --show-toplevel)
-
-# Run the JSON size limiter check
-echo "Running JSON size limiter check..."
-node "$PROJECT_ROOT/scripts/pushscript/test-json-limiter.js"
-
-# If the check fails, abort the commit
-if [ $? -ne 0 ]; then
-  echo "JSON size limiter check failed. Aborting commit."
-  exit 1
-fi
-
-# Continue with the commit
-exit 0
-EOL
-
-# Make the hook executable
-chmod +x .git/hooks/pre-commit
-
-echo "Git pre-commit hook installed successfully"
+# Auto-add npm scripts to package.json
+pushscript setup
 ```
 
-This hook provides an additional layer of protection by running the JSON size limiter check on every commit, even when using standard Git commands instead of PushScript CLI.
+This adds convenient shortcuts:
+- `npm run push` - AI commit + push
+- `npm run commit` - AI commit only
 
-## Configuration
-
-1. Create a `.env.local` or `.env`  file in your project root (if it doesn't already exist):
-
-```
-# Provider to use (groq, openai, anthropic, gemini)
-PUSHSCRIPT_LLM_PROVIDER=groq
-
-# API key for your preferred provider
-GROQ_API_KEY=your-key-here
-# OPENAI_API_KEY=your-key-here
-# ANTHROPIC_API_KEY=your-key-here
-# GEMINI_API_KEY=your-key-here
-
-# Optional: Model selection
-# GROQ_PUSHSCRIPT_MODEL=llama-3.3-70b-versatile
-# OPENAI_PUSHSCRIPT_MODEL=gpt-4o
-# ANTHROPIC_PUSHSCRIPT_MODEL=claude-3.7-sonnet
-# GEMINI_PUSHSCRIPT_MODEL=gemini-2.0-pro
-```
-
-2. Make sure `.env*` files are in your `.gitignore`:
-
-```
-# env files
-.env*
-```
-
-## Usage
-
-Use the following shortcuts to interact with PushScript (based on your package manager):
-
-### With pnpm:
-- `pnpm push` - Commit changes with an AI-generated message and push to the remote repository
-- `pnpm commit` - Just commit changes with an AI-generated message (no push)
-- `pnpm pushscript` - Access PushScript's general CLI
-
-### With npm:
-- `npm run push` - Commit changes with an AI-generated message and push to the remote repository
-- `npm run commit` - Just commit changes with an AI-generated message (no push)
-- `npm run pushscript` - Access PushScript's general CLI
-
-### With yarn:
-- `yarn push` - Commit changes with an AI-generated message and push to the remote repository
-- `yarn commit` - Just commit changes with an AI-generated message (no push)
-- `yarn pushscript` - Access PushScript's general CLI
-
-### Command Options
-
-#### With pnpm:
-- Specify a commit message: `pnpm push "your commit message"`
-- Specify a branch: `pnpm push "commit message" branch-name`
-- Push to main branch: `pnpm push --main` or `pnpm push main`
-- Push to dev branch: `pnpm push --dev` or `pnpm push dev`
-
-#### With npm:
-- Specify a commit message: `npm run push -- "your commit message"`
-- Specify a branch: `npm run push -- "commit message" branch-name`
-- Push to main branch: `npm run push -- --main` or `npm run push -- main`
-- Push to dev branch: `npm run push -- --dev` or `npm run push -- dev`
-
-> Note: With npm, you need to use `--` to pass arguments to the script
-
-## Troubleshooting
-
-If you encounter errors:
-
-1. Verify that your `.env.local` file is properly configured
-2. Check that you've installed all dependencies: `pnpm install`
-3. Make sure `"type": "module"` is present in your `package.json`
-4. Check that your API key is valid and has sufficient credits
-
-### Dependency Issues
-
-If you're experiencing dependency-related errors:
+## 🎯 Usage
 
 ```bash
-# Enable self-healing mode for automatic dependency installation and management
-export PUSHSCRIPT_SELF_HEAL=true
-
-# Then run PushScript as normal
-pnpm push
+pushscript                    # AI commit + push to current branch
+pushscript "fix: bug"         # Custom message + push
+pushscript commit             # Commit only (no push)
+pushscript --help             # Show all options
 ```
 
-This will make PushScript automatically detect and install missing dependencies.
+## 📖 Full Documentation
 
-For more detailed information, refer to the README.md in the pushscript directory.
+For complete configuration, troubleshooting, and advanced features, see the [README.md](../README.md).
+
+**Key sections:**
+- [Configuration files](../README.md#42--configuration-files-advanced) - Custom `.pushscript.json` setup
+- [Environment variables](../README.md#4--configuration) - All provider options
+- [CLI reference](../README.md#5--cli-reference) - Complete command list  
+- [Troubleshooting](../README.md#7--troubleshooting) - Common issues
