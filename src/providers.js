@@ -153,7 +153,16 @@ export const LLM_PROVIDERS = {
       }
       
       // If we've made it here, we have valid text content
-      return candidate.content.parts[0].text;
+      const rawText = candidate.content.parts[0].text;
+      
+      // Sanitize the response to remove markdown formatting that causes shell issues
+      // Gemini sometimes adds trailing backticks which break git commit commands
+      const sanitizedText = rawText
+        .replace(/```+$/, '')     // Remove trailing backticks
+        .replace(/^```+/, '')     // Remove leading backticks
+        .trim();                  // Remove extra whitespace
+      
+      return sanitizedText;
     },
     requestBuilder: (prompt, model, maxTokens) => {
       // Configure Gemini-specific parameters based on our token manager knowledge
