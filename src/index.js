@@ -12,7 +12,7 @@ import { dirname } from 'path';
 import config from './utils/config.js';
 
 // Import module components
-import { getProviderConfig, buildApiRequest } from './providers.js';
+import { getProviderConfig, buildApiRequest, retryApiRequest } from './providers.js';
 import { checkSensitiveFiles, checkDependencyVulnerabilities, promptUser, runSecurityChecks } from './security/security.js';
 import { detectDependencyConflicts, analyzeDependencyConflictsWithLLM } from './dependency/dependency.js';
 import { getGitStatus, categorizeChanges, generateSimpleCommitMessage, getCurrentBranch, confirmPush } from './git/git.js';
@@ -107,8 +107,17 @@ Keep the first line under 80 characters.`;
         // Check rate limits first
         const rateCheck = geminiManager.checkRateLimit(optimizedDiff.estimatedTokens);
         if (!rateCheck.allowed) {
-          logWarning(`Rate limit would be exceeded (${rateCheck.reason}). Waiting ${Math.ceil(rateCheck.waitTime / 1000)}s would resolve this.`);
-          // Continue anyway but log the warning
+          const waitTimeSeconds = Math.ceil(rateCheck.waitTime / 1000);
+          logWarning(`Rate limit would be exceeded (${rateCheck.reason}). Waiting ${waitTimeSeconds}s to avoid 503 errors...`);
+          
+          // Actually wait for rate limits if it's a short wait (less than 10 seconds)
+          if (waitTimeSeconds <= 10) {
+            await new Promise(resolve => setTimeout(resolve, rateCheck.waitTime));
+            logInfo('Rate limit wait completed, proceeding with request...');
+          } else {
+            logError(`Wait time too long (${waitTimeSeconds}s), falling back to simple commit message`);
+            return generateSimpleCommitMessage(changes);
+          }
         }
         
         // Get optimal output tokens for the model
@@ -118,34 +127,40 @@ Keep the first line under 80 characters.`;
       // Use the buildApiRequest helper to create the request
       const { request, endpoint } = await buildApiRequest(providerDetails, prompt, maxTokens);
       
-      // Send the API request
-      const response = await fetch(endpoint, request);
-      
-      // Handle errors with detailed information
-      if (!response.ok) {
-        let errorDetails = '';
-        try {
-          const errorJson = await response.json();
-          errorDetails = JSON.stringify(errorJson, null, 2);
-        } catch (e) {
+      // Send the API request with retry logic for 503 errors
+      const { response, data } = await retryApiRequest(async () => {
+        const apiResponse = await fetch(endpoint, request);
+        
+        // Handle errors with detailed information
+        if (!apiResponse.ok) {
+          let errorDetails = '';
           try {
-            errorDetails = await response.text();
-          } catch (e2) {
-            errorDetails = `Status: ${response.status} ${response.statusText}`;
+            const errorJson = await apiResponse.json();
+            errorDetails = JSON.stringify(errorJson, null, 2);
+          } catch (e) {
+            try {
+              errorDetails = await apiResponse.text();
+            } catch (e2) {
+              errorDetails = `Status: ${apiResponse.status} ${apiResponse.statusText}`;
+            }
           }
+          
+          // Only log full details on the final failure (not retries)
+          if (!errorDetails.includes('503') && !errorDetails.includes('overloaded')) {
+            console.error('Full request details:');
+            console.error('URL:', endpoint);
+            console.error('Headers:', JSON.stringify(request.headers, null, 2));
+            console.error('Body:', typeof request.body === 'string' ? request.body.substring(0, 500) + '...' : request.body);
+            console.error('\nFull error response:');
+            console.error(errorDetails);
+          }
+          
+          throw new Error(`${errorDetails}`);
         }
-        
-        console.error('Full request details:');
-        console.error('URL:', endpoint);
-        console.error('Headers:', JSON.stringify(request.headers, null, 2));
-        console.error('Body:', JSON.stringify(request.body, null, 2));
-        console.error('\nFull error response:');
-        console.error(errorDetails);
-        
-        throw new Error(`API request failed: ${errorDetails}`);
-      }
 
-      const data = await response.json();
+        const responseData = await apiResponse.json();
+        return { response: apiResponse, data: responseData };
+      });
       const config = providerDetails.config;
       const message = config.responseHandler(data);
       
@@ -377,11 +392,21 @@ export async function commit(message) {
     logInfo('Creating commit...');
     try {
       const messageLines = finalCommitMessage.split('\n');
-      // Properly escape quotes in commit messages for shell safety
+      // Properly escape quotes and remove any problematic characters in commit messages for shell safety
       const messageArgs = messageLines.map(line => {
-        const escapedLine = line.replace(/"/g, '\\"');
+        const escapedLine = line
+          .replace(/"/g, '\\"')           // Escape quotes
+          .replace(/`/g, "'")             // Replace backticks with single quotes
+          .replace(/\$/g, '\\$')          // Escape dollar signs
+          .replace(/\\/g, '\\\\')         // Escape backslashes
+          .replace(/[^\x20-\x7E]/g, '')   // Remove non-printable characters
+          .trim();                        // Remove leading/trailing whitespace
         return `-m "${escapedLine}"`;
       }).join(' ');
+      
+      // Log the command being executed for debugging
+      console.log('Executing git commit command:', `git commit ${messageArgs}`);
+      
       execSync(`git commit ${messageArgs}`);
       logSuccess('Successfully created commit!');
       return finalCommitMessage;

@@ -5,6 +5,56 @@ All notable changes to PushScript will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.7] - 2025-07-12
+
+### Fixed
+- **Critical Gemini Shell Error Fix**: Resolved shell errors when using Gemini provider
+  - Fixed "unexpected EOF while looking for matching" errors caused by backticks in AI responses
+  - Enhanced response sanitization to remove markdown code blocks and backticks
+  - Improved shell character escaping for git commit commands
+  - Added comprehensive logging and debugging for troubleshooting
+  - Updated Gemini prompt to explicitly request plain text responses
+
+### Added
+- **Enhanced Response Sanitization**: 
+  - Removes entire code blocks (```...```) from AI responses
+  - Strips all backticks and markdown formatting
+  - Normalizes newlines and whitespace
+  - Additional validation for edge cases
+- **Improved Shell Safety**: 
+  - Better character escaping for quotes, backticks, dollar signs, and backslashes
+  - Removal of non-printable characters
+  - Command logging for debugging
+- **Comprehensive Testing**: 
+  - Added tests for real-world problematic responses
+  - Verified fix works with exact error scenarios from user reports
+
+### Technical Details
+- **Root Cause**: Gemini was returning responses with markdown code blocks containing backticks, which were interpreted as command substitution by the shell
+- **Solution**: Multi-layered approach combining prompt engineering, response sanitization, and shell safety measures
+- **Impact**: Resolves critical issue preventing users from committing with Gemini provider
+
+## [0.2.1] - 2025-01-01
+
+### Fixed
+- **Major API Reliability Improvements**: Fixed persistent 503 "model overloaded" errors
+  - Added automatic retry logic with exponential backoff for temporary API failures
+  - Implemented proper rate limiting enforcement to prevent hitting API limits
+  - Improved error handling to distinguish between retryable and permanent failures
+  - Reduced verbose logging that could cause issues in production environments
+
+### Changed
+- **Enhanced Gemini API Integration**:
+  - Removed automatic API key format fixing that could cause authentication issues
+  - Added proper API key validation with helpful warnings
+  - Improved rate limiting to actually wait for limits instead of just warning
+  - Optimized request body logging to prevent overwhelming output
+
+### Added
+- **New Troubleshooting Documentation**: Added comprehensive guide for API-related issues
+- **Retry Mechanism**: API requests now automatically retry up to 3 times for 503 errors
+- **Smart Rate Limiting**: Automatically waits for rate limits (up to 10 seconds) to prevent errors
+
 ## [0.2.0] - 2025-05-28
 
 ### Added

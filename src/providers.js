@@ -119,17 +119,22 @@ export const LLM_PROVIDERS = {
     apiEndpoint: 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent',
     defaultModel: 'gemini-2.0-flash',
     headerTemplate: (apiKey) => {
-      // If API key doesn't start with "AIza", it's not properly formatted for Google APIs
-      const formattedKey = apiKey.startsWith('AIza') ? apiKey : `AIza${apiKey}`;
+      // Validate API key format for Google APIs
+      if (!apiKey) {
+        throw new Error('Gemini API key is required');
+      }
+      
+      // Google API keys should start with "AIza" - warn if they don't but don't auto-fix
+      if (!apiKey.startsWith('AIza')) {
+        console.warn('Warning: Gemini API key should start with "AIza". Please verify your API key format.');
+      }
+      
       return {
         'Content-Type': 'application/json',
-        'x-goog-api-key': formattedKey
+        'x-goog-api-key': apiKey
       };
     },
     responseHandler: (data) => {
-      // Debug the raw response to help diagnose issues
-      console.log('Raw Gemini API response:', JSON.stringify(data, null, 2));
-      
       // Validate response structure before attempting to extract content
       if (!data) {
         throw new Error('Empty response received from Gemini API');
@@ -155,12 +160,29 @@ export const LLM_PROVIDERS = {
       // If we've made it here, we have valid text content
       const rawText = candidate.content.parts[0].text;
       
+      // Log the raw response for debugging if it contains problematic characters
+      if (rawText.includes('```') || rawText.includes('`')) {
+        console.log('Raw Gemini API response:', JSON.stringify(rawText, null, 2));
+      }
+      
       // Sanitize the response to remove markdown formatting that causes shell issues
-      // Gemini sometimes adds trailing backticks which break git commit commands
+      // Gemini sometimes adds code blocks and backticks which break git commit commands
       const sanitizedText = rawText
-        .replace(/```+$/, '')     // Remove trailing backticks
-        .replace(/^```+/, '')     // Remove leading backticks
-        .trim();                  // Remove extra whitespace
+        .replace(/```[\s\S]*?```/g, '')  // Remove entire code blocks (including content)
+        .replace(/```+/g, '')            // Remove any remaining backticks
+        .replace(/\n\s*\n\s*\n/g, '\n')  // Normalize multiple newlines
+        .replace(/\n\s*\n/g, '\n')       // Normalize double newlines to single
+        .replace(/^\s+|\s+$/g, '')       // Trim whitespace from start and end
+        .trim();                         // Final trim
+      
+      // Additional validation: if the result still contains problematic characters, log a warning
+      if (sanitizedText.includes('`') || sanitizedText.includes('```')) {
+        console.warn('Warning: Sanitized response still contains backticks, applying additional cleanup');
+        return sanitizedText
+          .replace(/`/g, '')             // Remove any remaining backticks
+          .replace(/\n\s*\n/g, '\n')     // Normalize newlines again
+          .trim();
+      }
       
       return sanitizedText;
     },
@@ -174,9 +196,11 @@ export const LLM_PROVIDERS = {
             role: "user",
             parts: [
               {
-                text: `You are a senior software developer. Create a concise, conventional commit message that strictly follows the Conventional Commits format: 
-          
-<type>(<scope>): <description>
+                text: `You are a senior software developer. Create a concise, conventional commit message that strictly follows the Conventional Commits format. 
+
+IMPORTANT: Return ONLY the commit message text. Do NOT use markdown formatting, code blocks, backticks, or any other formatting. Return plain text only.
+
+Format: <type>(<scope>): <description>
 
 Valid types: feat, fix, docs, style, refactor, perf, test, chore
 
@@ -230,8 +254,14 @@ For the following changes: ${prompt}`
  */
 export async function listGeminiModels(apiKey) {
   try {
-    // Ensure API key has proper format
-    const formattedKey = apiKey.startsWith('AIza') ? apiKey : `AIza${apiKey}`;
+    // Validate API key
+    if (!apiKey) {
+      throw new Error('Gemini API key is required');
+    }
+    
+    if (!apiKey.startsWith('AIza')) {
+      console.warn('Warning: Gemini API key should start with "AIza". Please verify your API key format.');
+    }
     
     // Call the ListModels endpoint
     const response = await fetch(
@@ -239,7 +269,7 @@ export async function listGeminiModels(apiKey) {
       {
         method: 'GET',
         headers: {
-          'x-goog-api-key': formattedKey
+          'x-goog-api-key': apiKey
         }
       }
     );
@@ -330,4 +360,43 @@ export async function buildApiRequest(providerDetails, prompt, maxTokens = 500) 
   
   // Return the request with the endpoint
   return { request, endpoint };
+}
+
+/**
+ * Retry wrapper for API requests with exponential backoff
+ * @param {Function} requestFn - Function that makes the API request
+ * @param {number} maxRetries - Maximum number of retries
+ * @param {number} baseDelay - Base delay in milliseconds
+ * @returns {Promise} The API response
+ */
+export async function retryApiRequest(requestFn, maxRetries = 3, baseDelay = 1000) {
+  let lastError;
+  
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    try {
+      const result = await requestFn();
+      return result;
+    } catch (error) {
+      lastError = error;
+      
+      // Check if this is a retryable error
+      const isRetryable = error.message.includes('503') || 
+                         error.message.includes('overloaded') ||
+                         error.message.includes('UNAVAILABLE') ||
+                         error.message.includes('rate limit');
+      
+      if (!isRetryable || attempt === maxRetries) {
+        throw error;
+      }
+      
+      // Calculate delay with exponential backoff and jitter
+      const delay = baseDelay * Math.pow(2, attempt) + Math.random() * 1000;
+      console.log(`API request failed (attempt ${attempt + 1}/${maxRetries + 1}): ${error.message}`);
+      console.log(`Retrying in ${Math.round(delay)}ms...`);
+      
+      await new Promise(resolve => setTimeout(resolve, delay));
+    }
+  }
+  
+  throw lastError;
 } 
