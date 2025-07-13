@@ -191,9 +191,9 @@ export class GeminiDiffOptimizer {
                   .replace(/^(\+{3}|-{3}) [ab]\//gm, '$1 ');
       
       case 4:
-        // Aggressive: Keep only +/- lines and hunk headers
+        // Keep +/- lines, hunk headers, and some context for better understanding
         return diff.split('\n')
-          .filter(line => line.startsWith('@') || line.startsWith('+') || line.startsWith('-'))
+          .filter(line => line.startsWith('@') || line.startsWith('+') || line.startsWith('-') || line.startsWith(' '))
           .join('\n');
       
       default:
