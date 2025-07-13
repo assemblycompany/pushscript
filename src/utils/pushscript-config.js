@@ -12,14 +12,22 @@ import yaml from 'js-yaml';
  * Default configuration that matches current hardcoded behavior
  */
 const DEFAULT_CONFIG = {
-  commit_style: `As a senior developer, create a concise git commit message for these changes.
-Focus on the key changes and their purpose. Keep it brief but informative.
+  commit_style: `As a senior developer, create a detailed and informative git commit message for these changes.
+Focus on explaining what was changed, why it was changed, and the impact of the changes.
 
 Follow conventional commits format:
-type(scope): concise summary
+type(scope): descriptive summary
 
 Where type is one of: feat, fix, docs, style, refactor, perf, test, chore
-Keep the first line under 80 characters.`,
+Keep the first line under 80 characters, but feel free to add additional details on subsequent lines if needed.
+
+Examples of good commit messages:
+- feat(auth): add OAuth2 authentication with Google and GitHub providers
+  Implement secure OAuth2 flow with proper error handling and user session management
+- fix(api): resolve race condition in user data updates
+  Prevent data corruption when multiple requests modify the same user record simultaneously
+- refactor(ui): migrate button components to use new design system
+  Update all button variants to use consistent styling and improve accessibility`,
 
   patterns: [
     {
@@ -38,6 +46,13 @@ Keep the first line under 80 characters.`,
     max_length: 80,
     require_conventional: true,
     allowed_types: ["feat", "fix", "docs", "style", "refactor", "perf", "test", "chore"]
+  },
+  
+  // AI generation settings
+  ai: {
+    max_tokens: 300,
+    allow_multiline: true,
+    prefer_detailed: true
   }
 };
 

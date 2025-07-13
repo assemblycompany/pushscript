@@ -21,7 +21,7 @@ import { colorize, logInfo, logSuccess, logWarning, logError, logTitle, logList,
 import { GeminiDiffOptimizer, createGeminiManager } from './token-utils.js';
 import { handleLargeJsonFiles } from './security/json-size-limiter.js';
 // Import config system
-import { getCommitStyle, getValidationRules } from './utils/pushscript-config.js';
+import { getCommitStyle, getValidationRules, loadPushscriptConfig } from './utils/pushscript-config.js';
 
 // Setup for ESM
 const __filename = fileURLToPath(import.meta.url);
@@ -32,6 +32,19 @@ console.log('PushScript configuration:');
 console.log(`- Selected provider: ${config.provider}`);
 console.log(`- API key present: ${config.apiKey ? 'Yes' : 'No'}`);
 console.log(`- Model: ${config.model}`);
+
+/**
+ * Get AI configuration settings
+ * @returns {Object} AI configuration
+ */
+function getAIConfig() {
+  try {
+    const config = loadPushscriptConfig();
+    return config.ai || { max_tokens: 300, allow_multiline: true, prefer_detailed: true };
+  } catch (error) {
+    return { max_tokens: 300, allow_multiline: true, prefer_detailed: true };
+  }
+}
 
 /**
  * Generate a commit message using an AI provider
@@ -91,16 +104,18 @@ ${optimizedDiff.content}
 \`\`\`
 
 Follow conventional commits format:
-type(scope): concise summary
+type(scope): descriptive summary
 
 Where type is one of: feat, fix, docs, style, refactor, perf, test, chore
-Keep the first line under 80 characters.`;
+Keep the first line under 80 characters, but feel free to add additional details on subsequent lines if needed.`;
 
     try {
       logInfo(`Generating commit message using ${name}${model ? '/' + model : ' (default model)'}...`);
       
       // Use the gemini manager for request parameters if available
-      let maxTokens = 150;
+      const aiConfig = getAIConfig();
+      let maxTokens = aiConfig.max_tokens || 300;
+      
       if (isGemini) {
         const geminiManager = createGeminiManager();
         
@@ -120,8 +135,8 @@ Keep the first line under 80 characters.`;
           }
         }
         
-        // Get optimal output tokens for the model
-        maxTokens = 100; // Lower for gemini to reduce likelihood of issues
+        // Use configured max tokens, but ensure it's reasonable
+        maxTokens = Math.min(maxTokens, 500); // Cap at 500 tokens for safety
       }
       
       // Use the buildApiRequest helper to create the request

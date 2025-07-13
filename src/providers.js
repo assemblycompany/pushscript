@@ -198,7 +198,7 @@ export const LLM_PROVIDERS = {
               {
                 text: `You are a senior software developer. Create a concise, conventional commit message that strictly follows the Conventional Commits format. 
 
-IMPORTANT: Return ONLY the commit message text. Do NOT use markdown formatting, code blocks, backticks, or any other formatting. Return plain text only.
+IMPORTANT: Create a detailed commit message that explains the changes clearly. You may include a brief description after the first line if needed. Do NOT use markdown formatting, code blocks, or backticks. Return plain text only.
 
 Format: <type>(<scope>): <description>
 

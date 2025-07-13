@@ -1,6 +1,6 @@
 {
   "name": "pushscript",
-  "version": "0.2.7",
+  "version": "0.2.8",
   "description": "AI-powered Git workflow automation with conventional commits, vulnerability scanning, and multi-provider LLM support",
   "type": "module",
   "main": "./src/cli.js",
@@ -66,7 +66,8 @@
     "@google/generative-ai": "^0.24.1",
     "dotenv": "^16.5.0",
     "js-yaml": "^4.1.0",
-    "node-fetch": "^3.3.2"
+    "node-fetch": "^3.3.2",
+    "pushscript": "^0.2.7"
   },
   "optionalDependencies": {
     "@anthropic-ai/sdk": "^0.12.0",

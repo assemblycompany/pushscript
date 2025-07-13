@@ -5,6 +5,35 @@ All notable changes to PushScript will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.8] - 2025-07-12
+
+### Fixed
+- **Enhanced AI Commit Message Quality**: Significantly improved the informativeness and detail of AI-generated commit messages
+  - Increased maxTokens from 100 to 300 to allow for more detailed responses
+  - Softened restrictive prompt instructions to encourage comprehensive descriptions
+  - Updated default commit style to emphasize detailed, informative messages with examples
+  - Improved diff optimization to preserve more context for better AI analysis
+  - Added AI configuration section for customizable token limits and message preferences
+
+### Added
+- **AI Configuration Options**: 
+  - `maxTokens` setting (default: 300) for controlling response length
+  - `messageDetail` preference for fine-tuning detail level
+  - Provider-specific token management improvements
+- **Enhanced Prompt Engineering**: 
+  - More explicit instructions for detailed commit messages
+  - Better examples and formatting guidance
+  - Improved context preservation in diff processing
+- **Better Message Quality**: 
+  - Commit messages now include detailed descriptions of changes
+  - Better categorization and scope identification
+  - More informative explanations of what and why changes were made
+
+### Technical Details
+- **Root Cause**: Previous settings were too restrictive, limiting AI responses to brief one-liners
+- **Solution**: Multi-faceted approach combining increased token limits, improved prompts, and better diff processing
+- **Impact**: Users now receive much more informative and detailed commit messages that better explain their changes
+
 ## [0.2.7] - 2025-07-12
 
 ### Fixed
