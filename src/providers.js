@@ -196,20 +196,23 @@ export const LLM_PROVIDERS = {
             role: "user",
             parts: [
               {
-                text: `You are a senior software developer. Create a concise, conventional commit message that strictly follows the Conventional Commits format. 
+                text: `You are a senior software developer. Create a detailed and informative conventional commit message that clearly explains what was changed, why it was changed, and the impact of the changes.
 
-IMPORTANT: Create a detailed commit message that explains the changes clearly. You may include a brief description after the first line if needed. Do NOT use markdown formatting, code blocks, or backticks. Return plain text only.
+IMPORTANT: Focus on providing comprehensive details about the changes. Include a descriptive summary on the first line, followed by additional details explaining the reasoning and impact. Do NOT use markdown formatting, code blocks, or backticks. Return plain text only.
 
 Format: <type>(<scope>): <description>
 
 Valid types: feat, fix, docs, style, refactor, perf, test, chore
 
 Example formats:
-- feat(ui): add new button component
-- fix(auth): resolve login issue with expired tokens
-- docs(readme): update installation instructions
+- feat(auth): add OAuth2 authentication with Google and GitHub providers
+  Implement secure OAuth2 flow with proper error handling and user session management
+- fix(api): resolve race condition in user data updates
+  Prevent data corruption when multiple requests modify the same user record simultaneously
+- refactor(ui): migrate button components to use new design system
+  Update all button variants to use consistent styling and improve accessibility
 
-Use lowercase for type and scope. Keep the first line under 80 characters.
+Use lowercase for type and scope. Keep the first line under 80 characters, but provide detailed explanations on subsequent lines.
 
 For the following changes: ${prompt}`
               }
@@ -217,7 +220,7 @@ For the following changes: ${prompt}`
           }
         ],
         generationConfig: {
-          maxOutputTokens: maxTokens || 100,
+          maxOutputTokens: maxTokens || 300,
           temperature: 0,
           topP: 0.95,
           topK: 40
