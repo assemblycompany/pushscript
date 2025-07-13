@@ -196,9 +196,9 @@ export const LLM_PROVIDERS = {
             role: "user",
             parts: [
               {
-                text: `You are a senior software developer. Create a detailed and informative conventional commit message that clearly explains what was changed, why it was changed, and the impact of the changes.
+                text: `You are a senior software developer. Create a clear and informative conventional commit message that explains what was changed and why.
 
-IMPORTANT: Focus on providing comprehensive details about the changes. Include a descriptive summary on the first line, followed by additional details explaining the reasoning and impact. Do NOT use markdown formatting, code blocks, or backticks. Return plain text only.
+IMPORTANT: Provide a descriptive summary on the first line, followed by 1-2 sentences explaining the key changes and their impact. Be informative but concise. Do NOT use markdown formatting, code blocks, or backticks. Return plain text only.
 
 Format: <type>(<scope>): <description>
 
@@ -212,7 +212,7 @@ Example formats:
 - refactor(ui): migrate button components to use new design system
   Update all button variants to use consistent styling and improve accessibility
 
-Use lowercase for type and scope. Keep the first line under 80 characters, but provide detailed explanations on subsequent lines.
+Use lowercase for type and scope. Keep the first line under 80 characters, and provide 1-3 sentences of explanation on subsequent lines.
 
 For the following changes: ${prompt}`
               }
