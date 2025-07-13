@@ -101,13 +101,7 @@ ${changesDescription}
 ${optimizedDiff.optimized ? 'Optimized Changes:' : 'Git Diff:'}
 \`\`\`
 ${optimizedDiff.content}
-\`\`\`
-
-Follow conventional commits format:
-type(scope): descriptive summary
-
-Where type is one of: feat, fix, docs, style, refactor, perf, test, chore
-Keep the first line under 80 characters, but feel free to add additional details on subsequent lines if needed.`;
+\`\`\``;
 
     try {
       logInfo(`Generating commit message using ${name}${model ? '/' + model : ' (default model)'}...`);
