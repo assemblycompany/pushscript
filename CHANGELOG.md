@@ -5,6 +5,30 @@ All notable changes to PushScript will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.10] - 2025-07-14
+
+### Fixed
+- **Gemini Response Sanitization Bug**: Fixed critical issue where AI-generated commit messages were being incorrectly rejected due to improper markdown sanitization
+  - **Root Cause**: The sanitization logic was removing entire code block content instead of just markdown formatting
+  - **Impact**: Valid conventional commit messages like `feat(data): implement smart data fetching` were being rejected with "does not match conventional format" error
+  - **Solution**: Updated sanitization to preserve content while removing only markdown formatting (````text`, ````, backticks)
+  - **Result**: AI-generated commit messages now pass validation correctly and are properly committed
+
+### Technical Details
+- **Regex Fix**: Changed from `/```[\s\S]*?```/g` (removes entire content) to `/```\w*\n?/g` and `/```\n?/g` (removes only formatting)
+- **Content Preservation**: Commit message content is now preserved while markdown artifacts are removed
+- **Test Updates**: Updated all sanitization tests to reflect new behavior where content is preserved
+- **Backward Compatibility**: No breaking changes; existing functionality remains intact
+
+## [0.2.9] - 2025-07-12
+
+### Fixed
+- **Commit Message Verbosity Balance**: Refined AI prompt to produce balanced commit messages
+  - Adjusted Gemini provider prompt to encourage clear and informative but concise messages
+  - Changed from "1-2 sentences" to "1-3 sentences" for explanation flexibility
+  - Maintained detailed descriptions while preventing excessive verbosity
+  - Result: Commit messages are now informative yet appropriately concise
+
 ## [0.2.8] - 2025-07-12
 
 ### Fixed

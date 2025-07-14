@@ -168,8 +168,9 @@ export const LLM_PROVIDERS = {
       // Sanitize the response to remove markdown formatting that causes shell issues
       // Gemini sometimes adds code blocks and backticks which break git commit commands
       const sanitizedText = rawText
-        .replace(/```[\s\S]*?```/g, '')  // Remove entire code blocks (including content)
-        .replace(/```+/g, '')            // Remove any remaining backticks
+        .replace(/```\w*\n?/g, '')       // Remove opening code block markers (e.g., ```text)
+        .replace(/```\n?/g, '')          // Remove closing code block markers
+        .replace(/`/g, '')               // Remove any remaining backticks
         .replace(/\n\s*\n\s*\n/g, '\n')  // Normalize multiple newlines
         .replace(/\n\s*\n/g, '\n')       // Normalize double newlines to single
         .replace(/^\s+|\s+$/g, '')       // Trim whitespace from start and end

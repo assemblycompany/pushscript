@@ -27,8 +27,8 @@ feat(position): implement context-driven allocation and unsold lot awareness
 
     const result = geminiHandler(mockResponse);
     
-    // Should only contain the first line, with code blocks removed
-    assert.strictEqual(result, 'feat(position): context-driven allocation, unsold lot awareness');
+    // Should preserve content but remove markdown formatting
+    assert.strictEqual(result, 'feat(position): context-driven allocation, unsold lot awareness\nfeat(position): implement context-driven allocation and unsold lot awareness');
   });
 
   await t.test('should handle response with only backticks', () => {
@@ -44,8 +44,8 @@ feat(position): implement context-driven allocation and unsold lot awareness
 
     const result = geminiHandler(mockResponse);
     
-    // Should remove all backticks and code content
-    assert.strictEqual(result, 'feat(ui): add new component');
+    // Should preserve content but remove backticks
+    assert.strictEqual(result, 'feat(ui): add new component  some code');
   });
 
   await t.test('should handle response with multiple code blocks', () => {
@@ -71,8 +71,8 @@ more code
 
     const result = geminiHandler(mockResponse);
     
-    // Should only contain the commit messages, with code blocks removed
-    assert.strictEqual(result, 'fix(auth): resolve login issue\ndocs(readme): update instructions');
+    // Should preserve content but remove markdown formatting
+    assert.strictEqual(result, 'fix(auth): resolve login issue\nsome code here\ndocs(readme): update instructions\nmore code');
   });
 
   await t.test('should handle response with no problematic characters', () => {

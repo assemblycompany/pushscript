@@ -24,8 +24,8 @@ test('Real-world Gemini Response Sanitization', async (t) => {
 
     const result = geminiHandler(mockResponse);
     
-    // Should only contain the first line, with all code blocks and backticks removed
-    assert.strictEqual(result, 'feat(position): context-driven allocation, unsold lot awareness');
+    // Should preserve content but remove markdown formatting
+    assert.strictEqual(result, 'feat(position): context-driven allocation, unsold lot awareness\nfeat(position): implement context-driven allocation and unsold lot awareness');
   });
 
   await t.test('should handle response with multiple problematic elements', () => {
@@ -41,8 +41,8 @@ test('Real-world Gemini Response Sanitization', async (t) => {
 
     const result = geminiHandler(mockResponse);
     
-    // Should remove all code blocks and backticks
-    assert.strictEqual(result, 'fix(auth): resolve login issue\nfeat(ui): add new component inline code');
+    // Should preserve content but remove markdown formatting
+    assert.strictEqual(result, 'fix(auth): resolve login issue\ncode block with backticks\nfeat(ui): add new component inline code');
   });
 
   await t.test('should handle empty response after sanitization', () => {
@@ -58,7 +58,7 @@ test('Real-world Gemini Response Sanitization', async (t) => {
 
     const result = geminiHandler(mockResponse);
     
-    // Should return empty string after removing code block
-    assert.strictEqual(result, '');
+    // Should preserve content but remove markdown formatting
+    assert.strictEqual(result, 'Only code block content');
   });
 }); 
