@@ -5,6 +5,19 @@ All notable changes to PushScript will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.11] - 2025-07-14
+
+### Fixed
+- **Commit Message Display Formatting**: Improved readability of commit messages in the final confirmation display
+  - **Issue**: Multi-line commit messages were being displayed as single paragraphs without proper line breaks
+  - **Solution**: Updated the commit message display logic to properly format multi-line messages with indentation
+  - **Result**: Commit messages now display with proper formatting, making them much easier to read and review
+
+### Technical Details
+- **Display Enhancement**: Modified `confirmPush` function to split commit messages by newlines and display each line separately
+- **Readability Improvement**: Multi-line commit messages now show proper indentation and line breaks in the final confirmation
+- **User Experience**: Users can now easily read and review detailed commit messages before confirming the push
+
 ## [0.2.10] - 2025-07-14
 
 ### Fixed

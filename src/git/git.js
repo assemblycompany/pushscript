@@ -136,7 +136,10 @@ export async function confirmPush(commitMessage, branchName) {
   // Show summary of what will happen
   console.log('\n\x1b[36mReady to push the following changes:\x1b[0m');
   console.log('\x1b[36mCommit Message:\x1b[0m');
-  console.log('\x1b[37m' + commitMessage + '\x1b[0m');
+  // Format commit message with proper indentation and line breaks
+  commitMessage.split('\n').forEach(line => {
+    console.log('\x1b[37m' + line + '\x1b[0m');
+  });
   
   console.log('\n\x1b[36mFiles changed:\x1b[0m');
   console.log('\x1b[37m' + execSync('git diff --cached --stat').toString() + '\x1b[0m');
