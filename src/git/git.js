@@ -5,6 +5,7 @@
 
 import { execSync } from 'child_process';
 import readline from 'readline';
+import { displayFileChanges, displayPushSummary } from '../utils/formatting.js';
 
 /**
  * Get the git status in a structured format
@@ -70,7 +71,7 @@ export function categorizeChanges(changes) {
 export function generateSimpleCommitMessage(changes) {
   const categories = categorizeChanges(changes);
   
-  console.log(`\nChanges: ${changes.length} files (${categories.modified.length} modified, ${categories.added.length} added, ${categories.deleted.length} deleted)`);
+  displayFileChanges(changes);
   
   let type = 'chore';
   let scope = '';
@@ -133,18 +134,11 @@ export async function confirmPush(commitMessage, branchName) {
     output: process.stdout
   });
 
-  // Show summary of what will happen
-  console.log('\n\x1b[36mReady to push the following changes:\x1b[0m');
-  console.log('\x1b[36mCommit Message:\x1b[0m');
-  // Format commit message with proper indentation and line breaks
-  commitMessage.split('\n').forEach(line => {
-    console.log('\x1b[37m' + line + '\x1b[0m');
-  });
+  // Get file changes for display
+  const changes = getGitStatus();
   
-  console.log('\n\x1b[36mFiles changed:\x1b[0m');
-  console.log('\x1b[37m' + execSync('git diff --cached --stat').toString() + '\x1b[0m');
-
-  console.log('\x1b[36mTarget branch:\x1b[0m', branchName);
+  // Show summary of what will happen using new formatting
+  displayPushSummary(commitMessage, branchName, changes);
 
   return new Promise((resolve) => {
     rl.question('\x1b[33mProceed with commit and push? (Y/n): \x1b[0m', (answer) => {
