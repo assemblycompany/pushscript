@@ -5,6 +5,47 @@ All notable changes to PushScript will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.12] - 2025-07-16
+
+### Enhanced
+- **Output Formatting and Readability**: Completely redesigned console output for better clarity and user experience
+  - **Issue**: Console output was plain and difficult to read, lacking visual structure and hierarchy
+  - **Solution**: Implemented comprehensive formatting system with sections, steps, icons, and proper indentation
+  - **Result**: All output is now clearly structured with visual indicators, making it much easier to understand
+
+### New Features
+- **Section Headers**: Clear section dividers with titles and descriptions using dashes and icons
+- **Step Indicators**: Visual progress indicators with status icons (ℹ️, ✅, ⚠️, ❌) and colors
+- **Structured Displays**: 
+  - Configuration display with provider, API key, and model information
+  - File changes categorized by type (modified, added, deleted) with counts
+  - Commit messages with proper multi-line formatting and indentation
+  - Push summaries with clear commit message, file count, and target branch
+- **Summary Boxes**: Bordered information boxes for important details
+- **Hierarchical Information**: Proper indentation and tree-like structure for related information
+
+### Technical Details
+- **New Formatting Functions**: Added comprehensive set of display functions in `src/utils/formatting.js`
+  - `displaySection()`: Section headers with titles and descriptions
+  - `displayConfig()`: Configuration information display
+  - `displayStep()`: Progress steps with status indicators
+  - `displayCommitMessage()`: Structured commit message display
+  - `displayFileChanges()`: Categorized file change display
+  - `displayPushSummary()`: Final push confirmation display
+  - `displaySummary()`: Information boxes with borders
+- **Visual Enhancements**: 
+  - Unicode icons for different types of information
+  - Color-coded status indicators (blue for info, green for success, yellow for warnings, red for errors)
+  - Proper indentation using tree-like characters (└─, │)
+  - Dashed borders and separators for visual structure
+- **Updated Output Locations**: All major output points now use the new formatting system
+  - Configuration display at startup
+  - File change summaries
+  - AI commit message generation
+  - Vulnerability scanning
+  - Commit creation process
+  - Push confirmation display
+
 ## [0.2.11] - 2025-07-14
 
 ### Fixed

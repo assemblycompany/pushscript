@@ -156,4 +156,187 @@ ${colorize('After adding shortcuts:', 'green')}
   npm run pushscript           # Same as pushscript
   `);
   process.exit(0);
+}
+
+/**
+ * Display a section header with clear formatting
+ * @param {string} title Section title
+ * @param {string} description Optional description
+ */
+export function displaySection(title, description = null) {
+  console.log(`\n${colorize('─'.repeat(60), 'cyan')}`);
+  console.log(`${colorize('📋', 'cyan')} ${colorize(title, 'cyan')}`);
+  if (description) {
+    console.log(`${colorize('   ', 'cyan')} ${colorize(description, 'dim')}`);
+  }
+  console.log(`${colorize('─'.repeat(60), 'cyan')}`);
+}
+
+/**
+ * Display configuration information in a structured format
+ * @param {Object} config Configuration object
+ */
+export function displayConfig(config) {
+  displaySection('PushScript Configuration', 'Current settings and provider information');
+  
+  const configItems = [
+    { label: 'Provider', value: config.provider, icon: '🤖' },
+    { label: 'API Key', value: config.apiKey ? 'Present' : 'Missing', icon: '🔑' },
+    { label: 'Model', value: config.model, icon: '🧠' }
+  ];
+  
+  configItems.forEach(item => {
+    const statusColor = item.label === 'API Key' && item.value === 'Present' ? 'green' : 
+                       item.label === 'API Key' && item.value === 'Missing' ? 'yellow' : 'white';
+    console.log(`  ${colorize(item.icon, 'cyan')} ${colorize(item.label + ':', 'white')} ${colorize(item.value, statusColor)}`);
+  });
+}
+
+/**
+ * Display a step in the process with clear formatting
+ * @param {string} step Step description
+ * @param {string} status Status (info, success, warning, error)
+ * @param {string} details Optional additional details
+ */
+export function displayStep(step, status = 'info', details = null) {
+  const icons = {
+    info: 'ℹ️',
+    success: '✅',
+    warning: '⚠️',
+    error: '❌'
+  };
+  
+  const colors = {
+    info: 'blue',
+    success: 'green',
+    warning: 'yellow',
+    error: 'red'
+  };
+  
+  const icon = icons[status];
+  const color = colors[status];
+  
+  console.log(`  ${colorize(icon, color)} ${colorize(step, color)}`);
+  if (details) {
+    console.log(`    ${colorize('└─', 'dim')} ${colorize(details, 'dim')}`);
+  }
+}
+
+/**
+ * Display a summary box with clear formatting
+ * @param {string} title Summary title
+ * @param {Array} items Array of items to display
+ * @param {string} type Type of summary (info, success, warning, error)
+ */
+export function displaySummary(title, items, type = 'info') {
+  const colors = {
+    info: 'cyan',
+    success: 'green',
+    warning: 'yellow',
+    error: 'red'
+  };
+  
+  const color = colors[type];
+  
+  console.log(`\n${colorize('┌─ ' + title + ' ─'.padEnd(58, '─') + '┐', color)}`);
+  items.forEach(item => {
+    console.log(`${colorize('│', color)} ${colorize(item, 'white')}${' '.repeat(56 - item.length)}${colorize('│', color)}`);
+  });
+  console.log(`${colorize('└─'.padEnd(58, '─') + '┘', color)}`);
+}
+
+/**
+ * Display commit message in a structured format
+ * @param {string} message Commit message
+ * @param {string} type Type of message (ai, manual, simple)
+ */
+export function displayCommitMessage(message, type = 'ai') {
+  const typeLabels = {
+    ai: 'AI Generated',
+    manual: 'Manual',
+    simple: 'Simple'
+  };
+  
+  const typeColors = {
+    ai: 'green',
+    manual: 'blue',
+    simple: 'yellow'
+  };
+  
+  displaySection('Commit Message', `${typeLabels[type]} commit message`);
+  
+  const lines = message.split('\n');
+  lines.forEach((line, index) => {
+    if (index === 0) {
+      // First line (title) gets special formatting
+      console.log(`  ${colorize('📝', typeColors[type])} ${colorize(line, 'white')}`);
+    } else if (line.trim()) {
+      // Body lines get indentation
+      console.log(`    ${colorize(line, 'dim')}`);
+    }
+  });
+}
+
+/**
+ * Display file changes in a structured format
+ * @param {Array} changes Array of change objects
+ */
+export function displayFileChanges(changes) {
+  displaySection('File Changes', 'Modified, added, and deleted files');
+  
+  const categories = {
+    modified: changes.filter(c => c.status === 'M'),
+    added: changes.filter(c => c.status === 'A'),
+    deleted: changes.filter(c => c.status === 'D')
+  };
+  
+  if (categories.modified.length > 0) {
+    console.log(`  ${colorize('📝', 'blue')} ${colorize('Modified Files:', 'blue')} ${colorize(categories.modified.length, 'white')}`);
+    categories.modified.forEach(change => {
+      console.log(`    ${colorize('└─', 'dim')} ${colorize(change.file, 'white')}`);
+    });
+  }
+  
+  if (categories.added.length > 0) {
+    console.log(`  ${colorize('➕', 'green')} ${colorize('Added Files:', 'green')} ${colorize(categories.added.length, 'white')}`);
+    categories.added.forEach(change => {
+      console.log(`    ${colorize('└─', 'dim')} ${colorize(change.file, 'white')}`);
+    });
+  }
+  
+  if (categories.deleted.length > 0) {
+    console.log(`  ${colorize('🗑️', 'red')} ${colorize('Deleted Files:', 'red')} ${colorize(categories.deleted.length, 'white')}`);
+    categories.deleted.forEach(change => {
+      console.log(`    ${colorize('└─', 'dim')} ${colorize(change.file, 'white')}`);
+    });
+  }
+}
+
+/**
+ * Display final push summary in a structured format
+ * @param {string} commitMessage Commit message
+ * @param {string} branch Target branch
+ * @param {Array} changes File changes
+ */
+export function displayPushSummary(commitMessage, branch, changes) {
+  displaySection('Ready to Push', 'Summary of changes to be pushed');
+  
+  // Display commit message
+  console.log(`  ${colorize('📝', 'cyan')} ${colorize('Commit Message:', 'cyan')}`);
+  const messageLines = commitMessage.split('\n');
+  messageLines.forEach((line, index) => {
+    if (index === 0) {
+      console.log(`    ${colorize('└─', 'dim')} ${colorize(line, 'white')}`);
+    } else if (line.trim()) {
+      console.log(`      ${colorize(line, 'dim')}`);
+    }
+  });
+  
+  // Display file changes summary
+  console.log(`\n  ${colorize('📁', 'cyan')} ${colorize('Files Changed:', 'cyan')}`);
+  console.log(`    ${colorize('└─', 'dim')} ${colorize(`${changes.length} files modified`, 'white')}`);
+  
+  // Display target branch
+  console.log(`\n  ${colorize('🌿', 'cyan')} ${colorize('Target Branch:', 'cyan')}`);
+  console.log(`    ${colorize('└─', 'dim')} ${colorize(branch, 'white')}`);
 } 

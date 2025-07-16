@@ -200,7 +200,7 @@ export const LLM_PROVIDERS = {
                 text: `You are a senior software developer. Create a clear and informative conventional commit message that explains what was changed and why.
 
 IMPORTANT: Provide a descriptive summary on the first line, followed by 1-2 sentences explaining the key changes and their impact. Be informative but concise. Do NOT use markdown formatting, code blocks, or backticks. Return plain text only.
-
+          
 Format: <type>(<scope>): <description>
 
 Valid types: feat, fix, docs, style, refactor, perf, test, chore

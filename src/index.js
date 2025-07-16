@@ -16,7 +16,7 @@ import { getProviderConfig, buildApiRequest, retryApiRequest } from './providers
 import { checkSensitiveFiles, checkDependencyVulnerabilities, promptUser, runSecurityChecks } from './security/security.js';
 import { detectDependencyConflicts, analyzeDependencyConflictsWithLLM } from './dependency/dependency.js';
 import { getGitStatus, categorizeChanges, generateSimpleCommitMessage, getCurrentBranch, confirmPush } from './git/git.js';
-import { colorize, logInfo, logSuccess, logWarning, logError, logTitle, logList, displayHelp } from './utils/formatting.js';
+import { colorize, logInfo, logSuccess, logWarning, logError, logTitle, logList, displayHelp, displayConfig, displayStep, displaySection, displayCommitMessage, displayFileChanges, displayPushSummary } from './utils/formatting.js';
 // Import new Gemini token manager
 import { GeminiDiffOptimizer, createGeminiManager } from './token-utils.js';
 import { handleLargeJsonFiles } from './security/json-size-limiter.js';
@@ -28,10 +28,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 // Import config settings and log them
-console.log('PushScript configuration:');
-console.log(`- Selected provider: ${config.provider}`);
-console.log(`- API key present: ${config.apiKey ? 'Yes' : 'No'}`);
-console.log(`- Model: ${config.model}`);
+displayConfig(config);
 
 /**
  * Get AI configuration settings
@@ -85,9 +82,17 @@ async function generateAICommitMessage(changes) {
     const optimizedDiff = diffOptimizer.optimizeDiff(rawDiff);
     
     if (optimizedDiff.optimized) {
-      logInfo(`Optimizing diff for ${name} API request (tokens: ${optimizedDiff.estimatedTokens}/${optimizedDiff.limit})`);
+      displayStep(
+        `Optimizing diff for ${name} API request`, 
+        'info', 
+        `tokens: ${optimizedDiff.estimatedTokens}/${optimizedDiff.limit}`
+      );
       if (optimizedDiff.iterations > 0) {
-        logInfo(`Applied ${optimizedDiff.iterations} optimization strategies to reduce size`);
+        displayStep(
+          `Applied optimization strategies`, 
+          'info', 
+          `${optimizedDiff.iterations} strategies applied to reduce size`
+        );
       }
     }
 
@@ -104,7 +109,7 @@ ${optimizedDiff.content}
 \`\`\``;
 
     try {
-      logInfo(`Generating commit message using ${name}${model ? '/' + model : ' (default model)'}...`);
+      displayStep(`Generating commit message using ${name}${model ? '/' + model : ' (default model)'}`, 'info');
       
       // Use the gemini manager for request parameters if available
       const aiConfig = getAIConfig();
@@ -198,8 +203,7 @@ ${optimizedDiff.content}
         return generateSimpleCommitMessage(changes);
       }
 
-      logSuccess(`AI Generated Commit Message:`);
-      message.split('\n').forEach(line => console.log(colorize(line, 'white')));
+      displayCommitMessage(message, 'ai');
       
       return message;
 
@@ -241,7 +245,7 @@ export async function commit(message) {
     const changedFiles = initialStatus.split('\n').map(line => line.slice(3));
 
     // Stage changes
-    logInfo('Staging changes...');
+    displayStep('Staging changes', 'info');
     execSync('git add .');
 
     // Check for large JSON files and handle them based on config
@@ -370,13 +374,14 @@ export async function commit(message) {
     }
     
     // Check for vulnerabilities 
+    displayStep('Scanning for dependency vulnerabilities', 'info');
     const vulnerabilities = await checkDependencyVulnerabilities();
     if (vulnerabilities) {
-      logError(`Found ${vulnerabilities.count} high or critical severity vulnerabilities:`);
+      displayStep(`Found ${vulnerabilities.count} high or critical severity vulnerabilities`, 'error');
       vulnerabilities.details.forEach(vuln => {
-        console.log(`  ${colorize('•', 'yellow')} ${colorize(`${vuln.package}: ${vuln.title} (${vuln.severity})`, 'yellow')}`);
+        console.log(`    ${colorize('└─', 'dim')} ${colorize(`${vuln.package}: ${vuln.title} (${vuln.severity})`, 'yellow')}`);
         if (vuln.url) {
-          console.log(`    More info: ${vuln.url}`);
+          console.log(`      ${colorize('└─', 'dim')} ${colorize(`More info: ${vuln.url}`, 'dim')}`);
         }
       });
       logWarning('You can continue, but consider addressing these security issues soon.');
@@ -398,7 +403,7 @@ export async function commit(message) {
     }
 
     // Create commit - using -m multiple times to support multi-line messages
-    logInfo('Creating commit...');
+    displayStep('Creating commit', 'info');
     try {
       const messageLines = finalCommitMessage.split('\n');
       // Properly escape quotes and remove any problematic characters in commit messages for shell safety
@@ -417,7 +422,7 @@ export async function commit(message) {
       console.log('Executing git commit command:', `git commit ${messageArgs}`);
       
       execSync(`git commit ${messageArgs}`);
-      logSuccess('Successfully created commit!');
+      displayStep('Successfully created commit', 'success');
       return finalCommitMessage;
     } catch (error) {
       if (error.stdout && error.stdout.toString().includes('nothing to commit')) {
@@ -447,7 +452,7 @@ export async function push(message, branch) {
     // Default to main branch if none specified
     if (!branch) {
       branch = 'main';
-      logInfo(`No branch specified, defaulting to: ${branch}`);
+      displayStep(`No branch specified, defaulting to: ${branch}`, 'info');
     }
 
     const commitMessage = await commit(message);
@@ -475,10 +480,10 @@ export async function push(message, branch) {
     }
 
     // Push to remote
-    logInfo(`Pushing to ${branch}...`);
+    displayStep(`Pushing to ${branch}`, 'info');
     try {
       execSync(`git push origin ${branch}`);
-      logSuccess('Successfully pushed to GitHub!');
+      displayStep('Successfully pushed to GitHub', 'success');
     } catch (error) {
       if (error.stderr && error.stderr.toString().includes('non-fast-forward')) {
         logError('Error: Remote has new changes. Please pull first.');
