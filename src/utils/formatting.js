@@ -272,7 +272,7 @@ export function displayCommitMessage(message, type = 'ai') {
       console.log(`  ${colorize('📝', typeColors[type])} ${colorize(line, 'white')}`);
     } else if (line.trim()) {
       // Body lines get indentation
-      console.log(`    ${colorize(line, 'dim')}`);
+      console.log(`  ${colorize('  ', 'dim')} ${colorize(line, 'dim')}`);
     }
   });
 }
@@ -328,7 +328,7 @@ export function displayPushSummary(commitMessage, branch, changes) {
     if (index === 0) {
       console.log(`    ${colorize('└─', 'dim')} ${colorize(line, 'white')}`);
     } else if (line.trim()) {
-      console.log(`      ${colorize(line, 'dim')}`);
+      console.log(`    ${colorize('  ', 'dim')} ${colorize(line, 'dim')}`);
     }
   });
   
