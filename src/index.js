@@ -269,7 +269,22 @@ export async function commit(message) {
     // Check for hardcoded secrets
     console.log('🔍 DEBUG: About to scan for secrets...');
     displayStep('Scanning for hardcoded secrets', 'info');
-    const secretScanResult = await checkHardcodedSecrets(changes);
+    
+    // Convert git status objects to file objects with content
+    const filesToScan = [];
+    for (const change of changes) {
+      try {
+        const content = fs.readFileSync(change.file, 'utf8');
+        filesToScan.push({
+          path: change.file,
+          content: content
+        });
+      } catch (error) {
+        console.warn(`Warning: Could not read file ${change.file}: ${error.message}`);
+      }
+    }
+    
+    const secretScanResult = await checkHardcodedSecrets(filesToScan);
     console.log('🔍 DEBUG: Secret scan result:', secretScanResult);
     if (secretScanResult) {
       console.log('🚨 CRITICAL: High severity secrets detected!');
