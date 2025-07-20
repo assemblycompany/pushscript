@@ -5,6 +5,46 @@ All notable changes to PushScript will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.14] - 2025-07-16
+
+### Fixed
+- **Commit Message Indentation**: Fixed overly indented commit message body lines that appeared muted
+  - **Issue**: Commit message descriptions were being displayed with excessive indentation (4-6 spaces), making them hard to read
+  - **Solution**: Reduced indentation to 2 spaces with visual indicators for better readability
+  - **Result**: Commit message descriptions now display clearly and are easy to read while maintaining visual hierarchy
+
+## [0.3.0] - 2025-07-20
+
+### Added
+- **🔒 Comprehensive Secret Detection System**: Enterprise-grade secret scanning to prevent committing hardcoded secrets
+  - **53 Secret Patterns**: Covers AI services, cloud providers, payment systems, databases, and more
+  - **Entropy Validation**: Shannon entropy calculation to reduce false positives
+  - **Context Analysis**: Intelligent context validation to distinguish real secrets from test data
+  - **Performance Optimization**: Entropy caching for faster scanning
+  - **Clean Architecture**: Separated patterns (data) from detection logic (behavior)
+  - **Integration**: Seamless integration into PushScript commit workflow
+
+### Technical Details
+- **Pattern Coverage**: 
+  - AI/LLM Services: OpenAI, Anthropic, Google AI, Groq, Cohere, Hugging Face, Replicate
+  - Cloud Infrastructure: AWS, Azure, Google Cloud
+  - DevOps: GitHub, GitLab, Bitbucket, CircleCI, Jenkins, Travis
+  - Communication: Slack, Discord, Teams
+  - Payment: Stripe, PayPal, Square
+  - Databases: MongoDB, PostgreSQL, MySQL, Redis, SQL Server, Elasticsearch
+  - Email: SendGrid, Mailgun, Mailchimp, Postmark, Twilio
+  - Monitoring: DataDog, New Relic, Sentry, Mixpanel
+  - Security: JWT secrets, private keys, SSH keys, generic API keys
+- **Detection Features**:
+  - High entropy validation (4.0+ threshold)
+  - Negative entropy signals to filter test/example data
+  - Context keyword validation
+  - Variable name pattern matching
+  - Provider-specific validation rules
+  - Confidence scoring with detailed reasoning
+- **Performance**: Entropy calculation caching for repeated scans
+- **Architecture**: Clean separation of concerns with modular design
+
 ## [0.2.12] - 2025-07-16
 
 ### Enhanced
@@ -251,6 +291,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Future Releases
 
 ### Planned for v0.3.0
+- **🔒 Secret Detection System**: ✅ **COMPLETED** - Enterprise-grade secret scanning with entropy validation
 - GitHub integration for pull request automation
 - Custom commit templates
 - Branch-specific configuration

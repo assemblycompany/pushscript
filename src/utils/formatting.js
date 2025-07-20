@@ -156,7 +156,7 @@ ${colorize('After adding shortcuts:', 'green')}
   npm run pushscript           # Same as pushscript
   `);
   process.exit(0);
-}
+} 
 
 /**
  * Display a section header with clear formatting
