@@ -9,7 +9,7 @@ async function testDirectScan() {
   console.log('🧪 Testing Secret Detection Directly');
   console.log('='.repeat(50));
   
-  const testFile = 'src/test-config-with-secrets.js';
+  const testFile = 'src/test-secrets.js';
   const content = fs.readFileSync(testFile, 'utf8');
   
   console.log(`📁 Testing file: ${testFile}`);
