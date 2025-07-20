@@ -7,12 +7,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.2.12] - 2025-07-16
 
-### Fixed
-- **Commit Message Indentation**: Fixed overly indented commit message body lines that appeared muted
-  - **Issue**: Commit message descriptions were being displayed with excessive indentation (4-6 spaces), making them hard to read
-  - **Solution**: Reduced indentation to 2 spaces with visual indicators for better readability
-  - **Result**: Commit message descriptions now display clearly and are easy to read while maintaining visual hierarchy
-
 ### Enhanced
 - **Output Formatting and Readability**: Completely redesigned console output for better clarity and user experience
   - **Issue**: Console output was plain and difficult to read, lacking visual structure and hierarchy
