@@ -259,6 +259,27 @@ export async function commit(message) {
     // Recheck sensitive files after staging
     checkSensitiveFiles();
 
+    // Check for hardcoded secrets
+    console.log('🔍 DEBUG: About to scan for secrets...');
+    displayStep('Scanning for hardcoded secrets', 'info');
+    const secretScanResult = await runSecretScan();
+    console.log('🔍 DEBUG: Secret scan result:', secretScanResult);
+    if (secretScanResult) {
+      console.log('🚨 CRITICAL: High severity secrets detected!');
+      console.log('   Please review and remove before committing.');
+      
+      // Ask if the user wants to continue anyway
+      const shouldContinue = await promptUser('Continue with commit despite hardcoded secrets?');
+      
+      if (!shouldContinue) {
+        logWarning('Commit cancelled. All files unstaged.');
+        logInfo('Please remove secrets and try again.');
+        // Unstage all files
+        execSync('git reset -- .');
+        return;
+      }
+    }
+
     // Verify we have staged changes
     const changes = getGitStatus();
     if (changes.length === 0) {
@@ -370,27 +391,6 @@ export async function commit(message) {
       
       if (!shouldContinue) {
         logWarning('Commit cancelled. Resolve conflicts and try again.');
-        return;
-      }
-    }
-    
-    // Check for hardcoded secrets
-    console.log('🔍 DEBUG: About to scan for secrets...');
-    displayStep('Scanning for hardcoded secrets', 'info');
-    const secretScanResult = await runSecretScan();
-    console.log('🔍 DEBUG: Secret scan result:', secretScanResult);
-    if (secretScanResult) {
-      console.log('🚨 CRITICAL: High severity secrets detected!');
-      console.log('   Please review and remove before committing.');
-      
-      // Ask if the user wants to continue anyway
-      const shouldContinue = await promptUser('Continue with commit despite hardcoded secrets?');
-      
-      if (!shouldContinue) {
-        logWarning('Commit cancelled. All files unstaged.');
-        logInfo('Please remove secrets and try again.');
-        // Unstage all files
-        execSync('git reset -- .');
         return;
       }
     }
