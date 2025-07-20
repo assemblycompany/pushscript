@@ -272,9 +272,11 @@ export async function commit(message) {
     
     // Convert git status objects to file objects with content
     const filesToScan = [];
+    console.log('🔍 DEBUG: Files to scan:', changes.map(c => c.file));
     for (const change of changes) {
       try {
         const content = fs.readFileSync(change.file, 'utf8');
+        console.log(`🔍 DEBUG: Reading file ${change.file} (${content.length} chars)`);
         filesToScan.push({
           path: change.file,
           content: content
@@ -283,6 +285,7 @@ export async function commit(message) {
         console.warn(`Warning: Could not read file ${change.file}: ${error.message}`);
       }
     }
+    console.log(`🔍 DEBUG: Successfully prepared ${filesToScan.length} files for scanning`);
     
     const secretScanResult = await checkHardcodedSecrets(filesToScan);
     console.log('🔍 DEBUG: Secret scan result:', secretScanResult);
