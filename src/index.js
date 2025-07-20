@@ -17,7 +17,7 @@ import { checkSensitiveFiles, checkDependencyVulnerabilities, promptUser, runSec
 import { detectDependencyConflicts, analyzeDependencyConflictsWithLLM } from './dependency/dependency.js';
 import { getGitStatus, categorizeChanges, generateSimpleCommitMessage, getCurrentBranch, confirmPush } from './git/git.js';
 import { colorize, logInfo, logSuccess, logWarning, logError, logTitle, logList, displayHelp, displayConfig, displayStep, displaySection, displayCommitMessage, displayFileChanges, displayPushSummary } from './utils/formatting.js';
-import { displaySecretScanResults } from './security/secret-scanner.js';
+import { checkHardcodedSecrets } from './security/secret-scanner.js';
 // Import new Gemini token manager
 import { GeminiDiffOptimizer, createGeminiManager } from './token-utils.js';
 import { handleLargeJsonFiles } from './security/json-size-limiter.js';
@@ -259,10 +259,17 @@ export async function commit(message) {
     // Recheck sensitive files after staging
     checkSensitiveFiles();
 
+    // Verify we have staged changes
+    const changes = getGitStatus();
+    if (changes.length === 0) {
+      logWarning('No changes to commit after staging.');
+      return;
+    }
+
     // Check for hardcoded secrets
     console.log('🔍 DEBUG: About to scan for secrets...');
     displayStep('Scanning for hardcoded secrets', 'info');
-    const secretScanResult = await runSecretScan();
+    const secretScanResult = await checkHardcodedSecrets(changes);
     console.log('🔍 DEBUG: Secret scan result:', secretScanResult);
     if (secretScanResult) {
       console.log('🚨 CRITICAL: High severity secrets detected!');
@@ -278,13 +285,6 @@ export async function commit(message) {
         execSync('git reset -- .');
         return;
       }
-    }
-
-    // Verify we have staged changes
-    const changes = getGitStatus();
-    if (changes.length === 0) {
-      logWarning('No changes to commit after staging.');
-      return;
     }
     
     // Check for dependency conflicts
