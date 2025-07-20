@@ -5,15 +5,13 @@ All notable changes to PushScript will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.2.14] - 2025-07-16
+## [0.2.12] - 2025-07-16
 
 ### Fixed
 - **Commit Message Indentation**: Fixed overly indented commit message body lines that appeared muted
   - **Issue**: Commit message descriptions were being displayed with excessive indentation (4-6 spaces), making them hard to read
   - **Solution**: Reduced indentation to 2 spaces with visual indicators for better readability
   - **Result**: Commit message descriptions now display clearly and are easy to read while maintaining visual hierarchy
-
-## [0.2.12] - 2025-07-16
 
 ### Enhanced
 - **Output Formatting and Readability**: Completely redesigned console output for better clarity and user experience
