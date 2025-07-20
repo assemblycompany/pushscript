@@ -191,6 +191,7 @@ function scanFileForSecrets(filePath, content) {
   const lines = content.split('\n');
   
   Object.entries(SECRET_PATTERNS).forEach(([patternName, pattern]) => {
+    console.log(`🔍 DEBUG: Testing pattern ${patternName} on ${filePath}`);
     const matches = content.matchAll(pattern.pattern);
     
     for (const match of matches) {
@@ -207,6 +208,7 @@ function scanFileForSecrets(filePath, content) {
       
       // Only include if confidence is not low
       if (validation.confidence !== 'low') {
+        console.log(`🔍 DEBUG: Found secret with pattern ${patternName}: ${secret.substring(0, 20)}...`);
         results.push({
           pattern: patternName,
           secret: secret,
@@ -222,6 +224,8 @@ function scanFileForSecrets(filePath, content) {
           provider: pattern.provider,
           category: pattern.category
         });
+      } else {
+        console.log(`🔍 DEBUG: Secret found but low confidence: ${patternName} - ${validation.reason}`);
       }
     }
   });
