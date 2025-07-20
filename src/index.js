@@ -375,8 +375,10 @@ export async function commit(message) {
     }
     
     // Check for hardcoded secrets
+    console.log('🔍 DEBUG: About to scan for secrets...');
     displayStep('Scanning for hardcoded secrets', 'info');
     const secretScanResult = await runSecretScan();
+    console.log('🔍 DEBUG: Secret scan result:', secretScanResult);
     if (secretScanResult) {
       console.log('🚨 CRITICAL: High severity secrets detected!');
       console.log('   Please review and remove before committing.');
