@@ -7,6 +7,7 @@ import { execSync } from 'child_process';
 import fs from 'fs';
 import readline from 'readline';
 import { handleLargeJsonFiles } from '../security/json-size-limiter.js';
+import { checkHardcodedSecrets } from '../security/secret-scanner.js';
 
 /**
  * Checks for sensitive files in staged changes
@@ -83,6 +84,25 @@ export function runSecurityChecks(options = {}) {
   }
   
   return true;
+}
+
+/**
+ * Runs secret scanning on staged files
+ * @returns {Promise<boolean>} True if secrets found, false otherwise
+ */
+export async function runSecretScan() {
+  // Get staged files
+  const stagedFiles = execSync('git diff --cached --name-only')
+    .toString()
+    .trim()
+    .split('\n')
+    .filter(file => file)
+    .map(file => ({
+      path: file,
+      content: fs.readFileSync(file, 'utf8')
+    }));
+  
+  return await checkHardcodedSecrets(stagedFiles);
 }
 
 /**

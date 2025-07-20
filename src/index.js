@@ -13,10 +13,11 @@ import config from './utils/config.js';
 
 // Import module components
 import { getProviderConfig, buildApiRequest, retryApiRequest } from './providers.js';
-import { checkSensitiveFiles, checkDependencyVulnerabilities, promptUser, runSecurityChecks } from './security/security.js';
+import { checkSensitiveFiles, checkDependencyVulnerabilities, promptUser, runSecurityChecks, runSecretScan } from './security/security.js';
 import { detectDependencyConflicts, analyzeDependencyConflictsWithLLM } from './dependency/dependency.js';
 import { getGitStatus, categorizeChanges, generateSimpleCommitMessage, getCurrentBranch, confirmPush } from './git/git.js';
 import { colorize, logInfo, logSuccess, logWarning, logError, logTitle, logList, displayHelp, displayConfig, displayStep, displaySection, displayCommitMessage, displayFileChanges, displayPushSummary } from './utils/formatting.js';
+import { displaySecretScanResults } from './security/secret-scanner.js';
 // Import new Gemini token manager
 import { GeminiDiffOptimizer, createGeminiManager } from './token-utils.js';
 import { handleLargeJsonFiles } from './security/json-size-limiter.js';
@@ -369,6 +370,25 @@ export async function commit(message) {
       
       if (!shouldContinue) {
         logWarning('Commit cancelled. Resolve conflicts and try again.');
+        return;
+      }
+    }
+    
+    // Check for hardcoded secrets
+    displayStep('Scanning for hardcoded secrets', 'info');
+    const secretScanResult = await runSecretScan();
+    if (secretScanResult) {
+      console.log('🚨 CRITICAL: High severity secrets detected!');
+      console.log('   Please review and remove before committing.');
+      
+      // Ask if the user wants to continue anyway
+      const shouldContinue = await promptUser('Continue with commit despite hardcoded secrets?');
+      
+      if (!shouldContinue) {
+        logWarning('Commit cancelled. All files unstaged.');
+        logInfo('Please remove secrets and try again.');
+        // Unstage all files
+        execSync('git reset -- .');
         return;
       }
     }
