@@ -238,13 +238,17 @@ export const DEVOPS_PATTERNS = {
   },
   
   'travis_token': {
-    pattern: /\b[0-9a-zA-Z_-]{22}\b/g,
+    // More specific pattern: Travis CI tokens are typically base64-like strings
+    // Exclude common npm registry URL patterns and version strings
+    pattern: /\b(?!https?:\/\/|registry\.|version|resolved|integrity)[0-9a-zA-Z_-]{22,}\b/g,
     description: 'Travis CI Token',
     severity: 'high',
     confidence: 'medium',
     requiresEntropy: true,
     minEntropy: 4.0,
-    contextKeywords: ['travis', 'ci'],
+    // Require actual "travis" keyword, not just "ci" (to avoid false positives from "registry", etc.)
+    contextKeywords: ['travis'],
+    requiresContext: true, // Require context keywords for this pattern
     provider: 'Travis CI',
     category: 'devops'
   }

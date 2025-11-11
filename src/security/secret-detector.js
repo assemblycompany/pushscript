@@ -167,9 +167,21 @@ function validateContext(secret, context, pattern) {
   }
   
   // Require context for generic patterns
-  if (pattern.requiresContext && !context.trim()) {
-    confidence = 'low';
-    reason = 'Generic pattern requires context';
+  if (pattern.requiresContext) {
+    if (!context.trim()) {
+      confidence = 'low';
+      reason = 'Generic pattern requires context';
+    } else if (pattern.contextKeywords && pattern.contextKeywords.length > 0) {
+      // If requiresContext is true AND contextKeywords exist, both must be satisfied
+      const contextLower = context.toLowerCase();
+      const hasContext = pattern.contextKeywords.some(keyword => 
+        contextLower.includes(keyword.toLowerCase())
+      );
+      if (!hasContext) {
+        confidence = 'low';
+        reason = 'Pattern requires context keywords but none found';
+      }
+    }
   }
   
   return {
@@ -178,6 +190,28 @@ function validateContext(secret, context, pattern) {
     entropy: calculateShannonEntropy(secret),
     hasNegativeSignals: hasNegativeEntropySignals(secret, context)
   };
+}
+
+/**
+ * Check if a file should be excluded from certain pattern scans
+ * @param {string} filePath - Path to file
+ * @param {string} patternName - Name of the pattern being tested
+ * @returns {boolean} True if file should be excluded
+ */
+function shouldExcludeFile(filePath, patternName) {
+  const fileName = filePath.toLowerCase();
+  
+  // Exclude package-lock.json from Travis CI token scanning (too many false positives)
+  if (patternName === 'travis_token' && (fileName.includes('package-lock.json') || fileName.includes('yarn.lock') || fileName.includes('pnpm-lock.yaml'))) {
+    return true;
+  }
+  
+  // Exclude node_modules from all scanning
+  if (fileName.includes('node_modules/')) {
+    return true;
+  }
+  
+  return false;
 }
 
 /**
@@ -191,6 +225,11 @@ function scanFileForSecrets(filePath, content) {
   const lines = content.split('\n');
   
   Object.entries(SECRET_PATTERNS).forEach(([patternName, pattern]) => {
+    // Skip patterns for excluded files
+    if (shouldExcludeFile(filePath, patternName)) {
+      return;
+    }
+    
     console.log(`🔍 DEBUG: Testing pattern ${patternName} on ${filePath}`);
     const matches = content.matchAll(pattern.pattern);
     

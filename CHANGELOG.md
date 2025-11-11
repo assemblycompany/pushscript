@@ -5,6 +5,30 @@ All notable changes to PushScript will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.3] - 2025-11-11
+
+### Fixed
+- **Secret Detection False Positives**: Fixed excessive false positive detections in package-lock.json files
+  - **Issue**: Travis CI token pattern was too broad, causing 90+ false positives in package-lock.json files by matching npm registry URLs, package names, and version strings
+  - **Solution**: 
+    - Excluded `package-lock.json`, `yarn.lock`, and `pnpm-lock.yaml` from Travis CI token scanning (generated files shouldn't contain secrets)
+    - Made Travis CI token pattern more specific with negative lookahead to exclude common npm patterns (`https://`, `registry.`, `version`, `resolved`, `integrity`)
+    - Changed context keywords from `['travis', 'ci']` to `['travis']` only to avoid false matches from words like "registry" containing "ci"
+    - Added `requiresContext: true` to enforce strict context keyword validation
+    - Improved `requiresContext` validation logic to properly check for context keywords
+  - **Result**: Eliminated false positive detections in lock files while maintaining detection of real Travis CI tokens in source code
+
+### Technical Details
+- **File Exclusion**: Added `shouldExcludeFile()` function to skip specific patterns for certain file types
+  - Excludes lock files from Travis CI token scanning
+  - Excludes node_modules from all secret scanning
+- **Pattern Improvements**: Enhanced Travis CI token pattern in `src/security/secret-patterns.js`
+  - Negative lookahead to exclude npm registry patterns
+  - Stricter context keyword requirements
+- **Validation Logic**: Improved `validateContext()` in `src/security/secret-detector.js`
+  - Better handling of `requiresContext` flag with context keyword validation
+  - More accurate confidence scoring
+
 ## [0.3.2] - 2025-11-11
 
 ### Added
