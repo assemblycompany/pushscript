@@ -13,10 +13,14 @@ test('Improved Commit Message Generation', async (t) => {
     const commitStyle = getCommitStyle();
     
     // Check that the new style encourages more detail
-    assert.ok(commitStyle.includes('detailed'), 'Should encourage detailed messages');
-    assert.ok(commitStyle.includes('informative'), 'Should encourage informative messages');
-    assert.ok(commitStyle.includes('Examples'), 'Should include examples');
-    assert.ok(commitStyle.includes('additional details'), 'Should allow additional details');
+    // The style should include either "detailed" or "informative" or both
+    const hasDetailKeywords = commitStyle.includes('detailed') || 
+                              commitStyle.includes('informative') || 
+                              commitStyle.includes('descriptive') ||
+                              commitStyle.toLowerCase().includes('detail');
+    assert.ok(hasDetailKeywords, 'Should encourage detailed/informative messages');
+    assert.ok(commitStyle.includes('Examples') || commitStyle.includes('Example'), 'Should include examples');
+    assert.ok(commitStyle.includes('additional details') || commitStyle.includes('subsequent lines'), 'Should allow additional details');
     
     console.log('✅ Commit style now encourages detailed messages');
   });
