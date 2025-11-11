@@ -230,7 +230,9 @@ function scanFileForSecrets(filePath, content) {
       return;
     }
     
-    console.log(`🔍 DEBUG: Testing pattern ${patternName} on ${filePath}`);
+    if (process.env.PUSHSCRIPT_DEBUG) {
+      console.log(`🔍 DEBUG: Testing pattern ${patternName} on ${filePath}`);
+    }
     const matches = content.matchAll(pattern.pattern);
     
     for (const match of matches) {
@@ -247,7 +249,9 @@ function scanFileForSecrets(filePath, content) {
       
       // Only include if confidence is not low
       if (validation.confidence !== 'low') {
-        console.log(`🔍 DEBUG: Found secret with pattern ${patternName}: ${secret.substring(0, 20)}...`);
+        if (process.env.PUSHSCRIPT_DEBUG) {
+          console.log(`🔍 DEBUG: Found secret with pattern ${patternName}: ${secret.substring(0, 20)}...`);
+        }
         results.push({
           pattern: patternName,
           secret: secret,
@@ -264,7 +268,9 @@ function scanFileForSecrets(filePath, content) {
           category: pattern.category
         });
       } else {
-        console.log(`🔍 DEBUG: Secret found but low confidence: ${patternName} - ${validation.reason}`);
+        if (process.env.PUSHSCRIPT_DEBUG) {
+          console.log(`🔍 DEBUG: Secret found but low confidence: ${patternName} - ${validation.reason}`);
+        }
       }
     }
   });
