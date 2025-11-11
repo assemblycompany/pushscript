@@ -360,12 +360,14 @@ export async function commit(message) {
       if (llmAnalysis) {
         logTitle('AI Analysis');
         logInfo('Root Cause:');
-        console.log(`  ${colorize(llmAnalysis.explanation, 'cyan')}`);
+        console.log(`  ${colorize(llmAnalysis.explanation || 'Dependency conflicts detected', 'cyan')}`);
         
-        logInfo('Resolution Strategy:');
-        llmAnalysis.strategy.forEach((step, index) => {
-          console.log(`  ${colorize(`${index + 1}.`, 'cyan')} ${colorize(step, 'white')}`);
-        });
+        if (llmAnalysis.strategy && Array.isArray(llmAnalysis.strategy) && llmAnalysis.strategy.length > 0) {
+          logInfo('Resolution Strategy:');
+          llmAnalysis.strategy.forEach((step, index) => {
+            console.log(`  ${colorize(`${index + 1}.`, 'cyan')} ${colorize(step, 'white')}`);
+          });
+        }
       } else {
         // Fall back to basic advice if LLM analysis failed
         // Determine package manager for advice

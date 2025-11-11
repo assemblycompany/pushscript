@@ -5,6 +5,31 @@ All notable changes to PushScript will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.1] - 2025-11-11
+
+### Fixed
+- **Dependency Conflict Analysis Parsing**: Fixed parsing errors when LLM returns dependency conflict analysis
+  - **Issue**: Gemini API responses for dependency conflict analysis sometimes included commit messages at the start, causing parsing failures and preventing proper display of AI-generated resolution strategies
+  - **Solution**: 
+    - Enhanced prompt to explicitly request structured format without commit messages
+    - Implemented robust multi-stage parsing with fallbacks
+    - Added support for structured format (EXPLANATION/RESOLUTION STRATEGY markers)
+    - Added fallback parsing for various response formats including "Resolution Strategy:" sections
+    - Strips commit message prefixes (feat:, fix:, chore:, etc.) from explanations
+    - Ensures strategy array is always properly populated
+  - **Result**: Dependency conflict analysis now reliably parses and displays AI-generated explanations and resolution strategies without errors
+
+### Technical Details
+- **Enhanced Parsing Logic**: Updated `analyzeDependencyConflictsWithLLM()` in `src/dependency/dependency.js`
+  - Primary parsing: Structured format with EXPLANATION: and RESOLUTION STRATEGY: markers
+  - Fallback parsing: Handles "Resolution Strategy:" sections and numbered lists
+  - Commit message removal: Automatically strips conventional commit prefixes
+  - Safety checks: Validates explanation and strategy before returning
+- **Display Improvements**: Added safety checks in `src/index.js` to handle edge cases
+  - Validates strategy array before iteration
+  - Provides fallback text for missing explanations
+  - Prevents crashes when parsing returns unexpected formats
+
 ## [0.2.14] - 2025-07-16
 
 ### Fixed

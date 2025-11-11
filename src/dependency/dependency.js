@@ -36,15 +36,20 @@ export async function analyzeDependencyConflictsWithLLM(conflicts, conflictType)
 You are an expert dependency manager for JavaScript/Node.js applications.
 Please analyze these dependency conflicts and provide specific advice on how to fix them.
 
+IMPORTANT: Return ONLY the analysis text. Do NOT include commit messages, markdown formatting, code blocks, or backticks. Return plain text only.
+
 Conflict type: ${conflictType}
 
 Conflict messages:
 ${conflictSample.join('\n')}
 
-Please provide:
-1. A concise explanation of what's causing these conflicts (1-2 sentences)
-2. A step-by-step resolution strategy (max 3 steps)
-3. A specific code example of how to fix the most critical issue (if applicable)
+Please provide your response in this exact format:
+EXPLANATION: [A concise explanation of what's causing these conflicts - 1-2 sentences]
+
+RESOLUTION STRATEGY:
+1. [First step to resolve]
+2. [Second step to resolve]
+3. [Third step to resolve]
 
 Keep your response very concise and practical - only provide what would be immediately useful to a developer.
 `;
@@ -65,12 +70,66 @@ Keep your response very concise and practical - only provide what would be immed
     const data = await response.json();
     const analysis = config.responseHandler(data);
     
-    // Split the analysis into sections
-    const sections = analysis.split(/\n(?:[\d]+\.\s*)/);
+    // Parse the analysis response
+    // Try to extract explanation and strategy from structured format
+    let explanation = '';
+    let strategy = [];
+    
+    // Look for EXPLANATION: marker
+    const explanationMatch = analysis.match(/EXPLANATION:\s*(.+?)(?:\n|RESOLUTION|$)/is);
+    if (explanationMatch) {
+      explanation = explanationMatch[1].trim();
+    }
+    
+    // Look for RESOLUTION STRATEGY: section
+    const strategyMatch = analysis.match(/RESOLUTION STRATEGY:\s*([\s\S]+?)(?:\n\n|\n[A-Z]+:|$)/i);
+    if (strategyMatch) {
+      // Extract numbered list items
+      const strategyText = strategyMatch[1];
+      const strategyItems = strategyText.match(/\d+\.\s*(.+?)(?=\n\d+\.|\n\n|$)/g);
+      if (strategyItems) {
+        strategy = strategyItems.map(item => {
+          // Remove the number prefix and clean up
+          return item.replace(/^\d+\.\s*/, '').trim();
+        }).filter(s => s);
+      }
+    }
+    
+    // Fallback: if structured parsing failed, try the old method
+    if (!explanation || strategy.length === 0) {
+      // Remove any commit message at the start (lines starting with type: or feat:, fix:, etc.)
+      let cleanedAnalysis = analysis.replace(/^(feat|fix|chore|docs|style|refactor|perf|test|hotfix)(\([^)]+\))?:\s*.+?\n/gi, '');
+      
+      // Try to split by "Resolution Strategy:" or numbered lists
+      const strategyMarker = cleanedAnalysis.match(/(?:Resolution\s+Strategy|RESOLUTION\s+STRATEGY):\s*/i);
+      if (strategyMarker) {
+        const parts = cleanedAnalysis.split(/(?:Resolution\s+Strategy|RESOLUTION\s+STRATEGY):\s*/i);
+        explanation = parts[0].trim();
+        const strategyText = parts[1] || '';
+        const strategyItems = strategyText.match(/\d+\.\s*(.+?)(?=\n\d+\.|\n\n|$)/g);
+        if (strategyItems) {
+          strategy = strategyItems.map(item => item.replace(/^\d+\.\s*/, '').trim()).filter(s => s);
+        }
+      } else {
+        // Last resort: split by numbered list
+        const sections = cleanedAnalysis.split(/\n(?=\d+\.\s*)/);
+        explanation = sections[0]?.trim() || cleanedAnalysis.split('\n')[0]?.trim() || '';
+        strategy = sections.slice(1).map(s => s.replace(/^\d+\.\s*/, '').trim()).filter(s => s);
+      }
+    }
+    
+    // Clean up explanation - remove any remaining commit message patterns
+    explanation = explanation.replace(/^(feat|fix|chore|docs|style|refactor|perf|test|hotfix)(\([^)]+\))?:\s*/i, '').trim();
+    
+    // If we still don't have a good explanation, use the first sentence
+    if (!explanation || explanation.length < 10) {
+      const firstLine = analysis.split('\n')[0]?.trim() || '';
+      explanation = firstLine.replace(/^(feat|fix|chore|docs|style|refactor|perf|test|hotfix)(\([^)]+\))?:\s*/i, '').trim();
+    }
     
     return {
-      explanation: sections[0]?.trim(),
-      strategy: sections.slice(1).map(s => s.trim()).filter(s => s)
+      explanation: explanation || 'Dependency conflicts detected that need resolution.',
+      strategy: strategy.length > 0 ? strategy : ['Run npm install to resolve dependency conflicts']
     };
   } catch (error) {
     logWarning(`Error analyzing conflicts with LLM: ${error.message}`);
