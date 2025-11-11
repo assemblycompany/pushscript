@@ -5,6 +5,36 @@ All notable changes to PushScript will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.2] - 2025-11-11
+
+### Added
+- **Gemini JSON Mode Support**: Implemented structured JSON output for dependency conflict analysis
+  - **Feature**: Uses Gemini's `responseSchema` API to force structured JSON responses instead of free-form text
+  - **Benefits**: 
+    - Eliminates parsing errors from markdown code blocks and formatting
+    - Guarantees consistent response structure
+    - Removes need for complex regex parsing
+    - More reliable and maintainable
+  - **Implementation**: 
+    - Added `responseSchema` with JSON Schema definition for dependency analysis
+    - Set `responseMimeType: "application/json"` to force JSON output
+    - Direct JSON parsing instead of text extraction
+    - Maintains fallback to text parsing for non-Gemini providers
+
+### Technical Details
+- **Gemini API Enhancement**: Updated `analyzeDependencyConflictsWithLLM()` in `src/dependency/dependency.js`
+  - Uses Gemini's native `responseSchema` feature for structured output
+  - JSON Schema defines `explanation` (string) and `strategy` (array of strings)
+  - Direct `JSON.parse()` on response text instead of markdown extraction
+  - Fallback parsing still available for other providers or edge cases
+- **Response Structure**: 
+  ```json
+  {
+    "explanation": "Clear explanation text",
+    "strategy": ["Step 1", "Step 2", "Step 3"]
+  }
+  ```
+
 ## [0.3.1] - 2025-11-11
 
 ### Fixed

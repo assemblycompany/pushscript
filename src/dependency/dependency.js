@@ -32,35 +32,112 @@ export async function analyzeDependencyConflictsWithLLM(conflicts, conflictType)
       conflicts;
     
     // Create a prompt for the LLM
-    const prompt = `
-You are an expert dependency manager for JavaScript/Node.js applications.
+    const prompt = `You are an expert dependency manager for JavaScript/Node.js applications.
 Please analyze these dependency conflicts and provide specific advice on how to fix them.
-
-IMPORTANT: Return ONLY the analysis text. Do NOT include commit messages, markdown formatting, code blocks, or backticks. Return plain text only.
 
 Conflict type: ${conflictType}
 
 Conflict messages:
 ${conflictSample.join('\n')}
 
-Please provide your response in this exact format:
-EXPLANATION: [A concise explanation of what's causing these conflicts - 1-2 sentences]
+Provide a concise explanation of what's causing these conflicts and a step-by-step resolution strategy.`;
 
-RESOLUTION STRATEGY:
-1. [First step to resolve]
-2. [Second step to resolve]
-3. [Third step to resolve]
+    // For Gemini, use structured JSON output via responseSchema
+    if (name === 'gemini') {
+      // Use the model from config, defaulting to gemini-2.0-flash if not specified
+      const geminiModel = model || config.defaultModel || 'gemini-2.0-flash';
+      const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${geminiModel}:generateContent`;
+      
+      const requestBody = {
+        contents: [
+          {
+            role: "user",
+            parts: [{ text: prompt }]
+          }
+        ],
+        generationConfig: {
+          maxOutputTokens: 250,
+          temperature: 0,
+          topP: 0.95,
+          topK: 40,
+          // Use responseSchema to force JSON output
+          responseSchema: {
+            type: "object",
+            properties: {
+              explanation: {
+                type: "string",
+                description: "A concise explanation of what's causing these conflicts (1-2 sentences)"
+              },
+              strategy: {
+                type: "array",
+                items: {
+                  type: "string"
+                },
+                description: "Step-by-step resolution strategy (max 3 steps)",
+                maxItems: 3
+              }
+            },
+            required: ["explanation", "strategy"]
+          },
+          responseMimeType: "application/json"
+        },
+        safetySettings: [
+          {
+            category: "HARM_CATEGORY_HARASSMENT",
+            threshold: "BLOCK_ONLY_HIGH"
+          },
+          {
+            category: "HARM_CATEGORY_HATE_SPEECH",
+            threshold: "BLOCK_ONLY_HIGH"
+          },
+          {
+            category: "HARM_CATEGORY_SEXUALLY_EXPLICIT",
+            threshold: "BLOCK_ONLY_HIGH"
+          },
+          {
+            category: "HARM_CATEGORY_DANGEROUS_CONTENT",
+            threshold: "BLOCK_ONLY_HIGH"
+          }
+        ]
+      };
 
-Keep your response very concise and practical - only provide what would be immediately useful to a developer.
-`;
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: config.headerTemplate(apiKey),
+        body: JSON.stringify(requestBody)
+      });
 
-    // Call the LLM API
+      if (!response.ok) {
+        throw new Error(`${name} API error: ${response.statusText} (${response.status})`);
+      }
+
+      const data = await response.json();
+      
+      // Parse JSON response directly from Gemini
+      if (data.candidates && data.candidates[0]?.content?.parts?.[0]?.text) {
+        const jsonText = data.candidates[0].content.parts[0].text;
+        try {
+          const parsed = JSON.parse(jsonText);
+          return {
+            explanation: parsed.explanation || 'Dependency conflicts detected that need resolution.',
+            strategy: Array.isArray(parsed.strategy) && parsed.strategy.length > 0 
+              ? parsed.strategy 
+              : ['Run npm install to resolve dependency conflicts']
+          };
+        } catch (parseError) {
+          logWarning(`Failed to parse JSON response: ${parseError.message}`);
+          // Fall through to text parsing
+        }
+      }
+    }
+    
+    // Fallback for non-Gemini providers or if JSON parsing fails
     const response = await fetch(config.apiEndpoint, {
       method: 'POST',
       headers: {
         ...config.headerTemplate(apiKey)
       },
-      body: JSON.stringify(config.requestBuilder(prompt, model, 250)) // Keep the response short
+      body: JSON.stringify(config.requestBuilder(prompt, model, 250))
     });
 
     if (!response.ok) {
@@ -70,37 +147,30 @@ Keep your response very concise and practical - only provide what would be immed
     const data = await response.json();
     const analysis = config.responseHandler(data);
     
-    // Parse the analysis response
-    // Try to extract explanation and strategy from structured format
+    // Parse text response as fallback
     let explanation = '';
     let strategy = [];
     
-    // Look for EXPLANATION: marker
+    // Try to extract explanation and strategy from text
     const explanationMatch = analysis.match(/EXPLANATION:\s*(.+?)(?:\n|RESOLUTION|$)/is);
     if (explanationMatch) {
       explanation = explanationMatch[1].trim();
     }
     
-    // Look for RESOLUTION STRATEGY: section
     const strategyMatch = analysis.match(/RESOLUTION STRATEGY:\s*([\s\S]+?)(?:\n\n|\n[A-Z]+:|$)/i);
     if (strategyMatch) {
-      // Extract numbered list items
       const strategyText = strategyMatch[1];
       const strategyItems = strategyText.match(/\d+\.\s*(.+?)(?=\n\d+\.|\n\n|$)/g);
       if (strategyItems) {
-        strategy = strategyItems.map(item => {
-          // Remove the number prefix and clean up
-          return item.replace(/^\d+\.\s*/, '').trim();
-        }).filter(s => s);
+        strategy = strategyItems.map(item => item.replace(/^\d+\.\s*/, '').trim()).filter(s => s);
       }
     }
     
-    // Fallback: if structured parsing failed, try the old method
+    // Last resort parsing
     if (!explanation || strategy.length === 0) {
-      // Remove any commit message at the start (lines starting with type: or feat:, fix:, etc.)
       let cleanedAnalysis = analysis.replace(/^(feat|fix|chore|docs|style|refactor|perf|test|hotfix)(\([^)]+\))?:\s*.+?\n/gi, '');
+      cleanedAnalysis = cleanedAnalysis.replace(/```/g, '').replace(/`/g, '').trim();
       
-      // Try to split by "Resolution Strategy:" or numbered lists
       const strategyMarker = cleanedAnalysis.match(/(?:Resolution\s+Strategy|RESOLUTION\s+STRATEGY):\s*/i);
       if (strategyMarker) {
         const parts = cleanedAnalysis.split(/(?:Resolution\s+Strategy|RESOLUTION\s+STRATEGY):\s*/i);
@@ -111,17 +181,15 @@ Keep your response very concise and practical - only provide what would be immed
           strategy = strategyItems.map(item => item.replace(/^\d+\.\s*/, '').trim()).filter(s => s);
         }
       } else {
-        // Last resort: split by numbered list
         const sections = cleanedAnalysis.split(/\n(?=\d+\.\s*)/);
         explanation = sections[0]?.trim() || cleanedAnalysis.split('\n')[0]?.trim() || '';
         strategy = sections.slice(1).map(s => s.replace(/^\d+\.\s*/, '').trim()).filter(s => s);
       }
     }
     
-    // Clean up explanation - remove any remaining commit message patterns
+    // Clean up explanation
     explanation = explanation.replace(/^(feat|fix|chore|docs|style|refactor|perf|test|hotfix)(\([^)]+\))?:\s*/i, '').trim();
     
-    // If we still don't have a good explanation, use the first sentence
     if (!explanation || explanation.length < 10) {
       const firstLine = analysis.split('\n')[0]?.trim() || '';
       explanation = firstLine.replace(/^(feat|fix|chore|docs|style|refactor|perf|test|hotfix)(\([^)]+\))?:\s*/i, '').trim();
