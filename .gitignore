@@ -33,3 +33,8 @@ devdocs/
 
 # PushScript local dependencies
 scripts/pushscript/node_modules/
+
+# Local test/debug files (contain test secret patterns)
+test-secret-detection*.js
+test-pattern.js
+test-secret-verification.js
